@@ -1,0 +1,18 @@
+.pagination{
+  display: flex;
+  padding: 20px 20px;
+}
+.card-img-top{
+  &.img-product{
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+  }
+}
+.form-control:read-only{
+  background-color: #eceef1;
+  opacity: 1;
+  cursor: not-allowed;
+}
+.app-brand{
+}

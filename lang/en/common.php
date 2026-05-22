@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'lbl_no_data' => 'No Data Available',
+    'lbl_price' => 'Price',
+    'lbl_actions' => 'Actions',
+    'lbl_submit_order' => 'Submit Order',
+    'lbl_remove_this' => 'Remove this item?',
+    'lbl_yes' => 'Yes',
+    'lbl_no' => 'No',
+    'lbl_allow_image' => 'Allowed JPG, GIF or PNG.',
+    'lbl_reset' => 'Reset',
+    'lbl_select' => 'Please Select',
+    'lbl_search' => 'Search',
+    'lbl_from_date' => 'From Date',
+    'lbl_to_date' => 'To Date',
+    'lbl_add_new' => 'Add New',
+    'lbl_register' => 'Register',
+    'lbl_list' => 'List',
+    'lbl_ago' => 'ago',
+    'lbl_view_all' => 'View All',
+    'lbl_the_seller' => 'The Seller',
+    'lbl_customer' => 'Customer',
+    'lbl_total' => 'Total',
+    'lbl_deposit' => 'Deposit',
+    'lbl_balance' => 'Balance',
+    'lbl_note' => 'Note',
+];

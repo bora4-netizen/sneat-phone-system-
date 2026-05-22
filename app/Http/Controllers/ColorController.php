@@ -1,0 +1,98 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Color;
+use Illuminate\Http\Request;
+
+class ColorController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request, string $lang)
+    {
+        //
+        $colors = Color::withCount([
+          'products',
+          'products as products_status_instock_count' => function ($query) {
+              $query->where('status', 1);
+          },
+          'products as products_status_sold_count' => function ($query) {
+              $query->where('status', 2);
+          },
+          'products as products_status_loan_count' => function ($query) {
+              $query->where('status', 3);
+          },
+        ])->get();
+        return view('colors.index', ['colors' => $colors]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:25|unique:colors,name',
+        ]);
+        $color = new Color();
+        $color->name = $request->name;
+        $color->save();
+        return redirect()->route('color.index', withLang());
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Color $color)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Color $color)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Color $color)
+    {
+        //
+        $messages = [
+            'required' => 'This field can not be blanked',
+            'unique' => 'This color is exists'
+        ];
+        $validatedData = $request->validate(([
+            'name' => 'required|unique:colors'
+        ]), $messages);
+        // dd($messages);
+        $color = Color::findorfail($request->id);
+        $color->name = $request->name;
+        $color->save();
+        // dd($color);
+        return redirect()->route('color.index', withLang());
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Color $color)
+    {
+        //
+    }
+}

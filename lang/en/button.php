@@ -1,0 +1,21 @@
+<?php
+    return[
+        'save' => 'Save',
+        'register' => 'Register',
+        'save_changes' => 'Save Changes',
+        'update' => 'Update',
+        'cancel' => 'Cancel',
+        'reset' => 'Reset',
+        'upload' => 'Upload',
+        'upload_new_photo' => 'Upload new photo',
+        'create' => 'Create',
+        'edit' => 'Edit',
+        'delete' => 'Delete',
+        'deactivate_account' => 'Deactivate Account',
+        'list' => 'List',
+        'search' => 'Search',
+        'close' => 'Close',
+        'clear' => 'Clear',
+        'profile' => 'My Profile',
+        'logout' => 'Logout',
+    ];
