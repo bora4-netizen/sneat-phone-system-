@@ -62,8 +62,8 @@ Route::group([
       Route::get('/loan/list-loan', [ReportController::class, 'listLoan'])->name('loan.list-loan');
     });
     Route::resource('roles', RoleController::class);
-    Route::methods('products', ProductController::class);
-    Route::group(['prefix'=>'user','as'=>'users.'], function(){
+    Route::get('/products', [ProductController::class, 'index']);  
+        Route::group(['prefix'=>'user','as'=>'users.'], function(){
         Route::get('/', [EmployeeController::class, 'index'])->name('index');
         Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [EmployeeController::class, 'update'])->name('update');
@@ -179,7 +179,7 @@ Route::group([
       Route::post('/profile/update/password', [CustomerController::class, 'updatePassword'])->name('update.profile.password');
 
       Route::group(['prefix'=>'gurantor', 'as'=>'gurantors.'], function(){
-        Route::get('/', [GurantorController::class, 'index'])->name('index');
+        Route::get('/', [CustomerController::class, 'index'])->name('index');
       });
   });
     Route::get('series/brand/{id}', [ProductController::class, 'getSeriesBybrand'])->name('get-series');
