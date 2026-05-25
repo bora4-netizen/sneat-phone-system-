@@ -22,8 +22,10 @@ use App\Http\Controllers\StorageController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\NetworkController;
-
+use App\Http\Controllers\GurantorController;
+use App\Http\Controllers\DashboardController;
 /*
+
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
@@ -75,7 +77,7 @@ Route::group([
         Route::get('/profile/edit/password', [UserController::class, 'editPassword'])->name('edit.profile.password');
         Route::post('/profile/update/password', [UserController::class, 'updatePassword'])->name('update.profile.password');
     });
-    Route::group(['prefix'=>'order','as'=>'orders.'], function(){
+      Route::group(['prefix'=>'order','as'=>'orders.'], function(){
       Route::get('/', [OrderController::class, 'index'])->name('index');
     });
     Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
@@ -133,7 +135,7 @@ Route::group([
         Route::post('/store', [ColorController::class, 'store'])->name('store');
         Route::post('/update', [ColorController::class, 'update'])->name('update');
     });
-    Route::group(['prefix'=>'storage', 'as'=>'storage.'], function(){
+        Route::group(['prefix'=>'storage', 'as'=>'storage.'], function(){
         Route::get('/', [StorageController::class, 'index'])->name('index');
         Route::get('/create', [StorageController::class, 'create'])->name('create');
         Route::post('/store', [StorageController::class, 'store'])->name('store');
@@ -177,7 +179,6 @@ Route::group([
       Route::post('/profile/update', [CustomerController::class, 'update'])->name('update.profile');
       Route::get('/profile/edit/password', [CustomerController::class, 'editPassword'])->name('edit.profile.password');
       Route::post('/profile/update/password', [CustomerController::class, 'updatePassword'])->name('update.profile.password');
-
       Route::group(['prefix'=>'gurantor', 'as'=>'gurantors.'], function(){
         Route::get('/', [GurantorController::class, 'index'])->name('index');
       });
@@ -186,5 +187,30 @@ Route::group([
     Route::get('products/check/{id}', [ProductController::class, 'getProductById'])->name('get-product-by-id');
     Route::get('company/', [CompanySettingController::class, 'index'])->name('company.index');
     Route::put('company/', [CompanySettingController::class, 'update'])->name('company.update');
-});
 
+
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth']);
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'role:admin']);
+// OR
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'permission:view dashboard']);
+Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
+Route::resource('orders', OrderController::class);
+Route::get('/dashboard', function () {
+    // This safely checks if you are logged in, then loads the view directly
+    if (Auth::check()) {
+        return view('dashboard'); // Make sure you have a 'dashboard.blade.php' file!
+    }
+    return redirect('/login');
+})->middleware(['auth']);
+
+Route::get('/dashboard', function () {
+    if (Auth::check()) {
+        return view('dashboard'); // matrix your dashboard blade view filename
+    }
+    return redirect('/login');
+})->middleware(['auth'])->name('dashboard'); // <--- ADD THIS NAME AT THE END!
+
+Route::get('/sales/create', [SalesController::class, 'create'])->name('sales.create');
+});
