@@ -24,6 +24,11 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\NetworkController;
 use App\Http\Controllers\GurantorController;
 use App\Http\Controllers\OrderCustomerController;
+use App\Http\Controllers\SalesController;
+
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -134,8 +139,8 @@ Route::group([
     Route::post('/store', [OrderController::class, 'store'])->name('store');
    });
     Route::group(['prefix'=>'order-customer','as'=>'orderCustomer.'], function(){
-      Route::get('/', [OrderCustomerController::class, 'index'])->name('index');
-      Route::get('/search', [OrderCustomerController::class, 'search'])->name('search'); // 👈 add this
+      // Route::get('/', [OrderCustomerController::class, 'index'])->name('index');
+      // Route::get('/search', [OrderCustomerController::class, 'search'])->name('search'); // 👈 add this
     });
 });
    Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
@@ -270,6 +275,8 @@ Route::group(['prefix'=>'order','as'=>'orders.'], function(){
   Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
   Route::resource('orders', OrderController::class);
 
+    // Incorrect
+// Route::get('/sales/create', [SalesController::class, 'create']);
 
 // If this exists elsewhere without the prefix, it conflicts
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index'); 
