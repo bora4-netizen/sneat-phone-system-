@@ -17,14 +17,14 @@ class CreateAdminUserSeeder extends Seeder
             ['email' => 'admin@email.com'],
             [
                 'name' => 'administrator',
-                'password' => bcrypt('password'),
+                'password' => bcrypt('abcd123456'),
             ]
         );
 
         // 2. Create or get role
         $role = Role::firstOrCreate([
             'name' => 'Administrator',
-            'guard_name' => 'web',
+            
         ]);
 
         // 3. Sync all permissions to role (if exists)
@@ -46,6 +46,6 @@ class CreateAdminUserSeeder extends Seeder
         );
 
         // 6. Link relationship (only if needed)
-        $user->employee()->save($employee);
+        // $user->employee()->save($employee);
     }
 }

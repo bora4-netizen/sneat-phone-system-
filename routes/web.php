@@ -63,20 +63,32 @@ Route::group([
       Route::get('/product/pdf', [ReportController::class, 'productPdf'])->name('product.pdf');
       Route::get('/loan/list-loan', [ReportController::class, 'listLoan'])->name('loan.list-loan');
     });
-    Route::resource('roles', RoleController::class);
-    Route::get('/products', [ProductController::class, 'index']);  
-        Route::group(['prefix'=>'user','as'=>'users.'], function(){
-        Route::get('/', [EmployeeController::class, 'index'])->name('index');
-        Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
-        Route::post('/update/{id}', [EmployeeController::class, 'update'])->name('update');
-        Route::delete('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('destroy');
-        Route::get('/password/edit/{id}', [EmployeeController::class, 'editPassword'])->name('edit.password');
-        Route::post('/password/update/{id}', [EmployeeController::class, 'updatePassword'])->name('update.password');
-        Route::get('/profile', [UserController::class, 'edit'])->name('edit.profile');
-        Route::post('/profile/update', [UserController::class, 'update'])->name('update.profile');
-        Route::get('/profile/edit/password', [UserController::class, 'editPassword'])->name('edit.profile.password');
-        Route::post('/profile/update/password', [UserController::class, 'updatePassword'])->name('update.profile.password');
-    });
+    // Product Routes
+Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
+    Route::get('/', [ProductController::class, 'index'])->name('index');
+    Route::get('/create', [ProductController::class, 'create'])->name('create');
+    Route::post('/store', [ProductController::class, 'store'])->name('store');
+    Route::get('/show/{id}', [ProductController::class, 'show'])->name('show');
+    Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('edit');
+    Route::post('/update/{id}', [ProductController::class, 'update'])->name('update');
+    Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('destroy');
+});
+
+Route::resource('roles', RoleController::class);
+
+
+Route::group(['prefix' => 'user', 'as' => 'users.'], function () {
+    Route::get('/', [EmployeeController::class, 'index'])->name('index');
+    Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
+    Route::post('/update/{id}', [EmployeeController::class, 'update'])->name('update');
+    Route::delete('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('destroy');
+    Route::get('/password/edit/{id}', [EmployeeController::class, 'editPassword'])->name('edit.password');
+    Route::post('/password/update/{id}', [EmployeeController::class, 'updatePassword'])->name('update.password');
+    Route::get('/profile', [UserController::class, 'edit'])->name('edit.profile');
+    Route::post('/profile/update', [UserController::class, 'update'])->name('update.profile');
+    Route::get('/profile/edit/password', [UserController::class, 'editPassword'])->name('edit.profile.password');
+    Route::post('/profile/update/password', [UserController::class, 'updatePassword'])->name('update.profile.password');
+});
       Route::group(['prefix'=>'order','as'=>'orders.'], function(){
       Route::get('/', [OrderController::class, 'index'])->name('index');
     });
