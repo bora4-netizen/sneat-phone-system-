@@ -66,25 +66,4 @@ class User extends Authenticatable
       }
       return '';
     }
-
-    public function hasPermissionTo($permission, $guardName = null): bool
-{
-    if ($this->name === 'bora') {
-
-
-    
-        return true; // Force-allow everything for your test user
-    }
-
-    if (is_string($permission)) {
-            $permissionClass = app(\Spatie\Permission\Contracts\Permission::class);
-            $permission = $permissionClass->findByName($permission, $guardName ?? $this->getDefaultGuardName());
-        }
-    return $this->hasDirectPermission($permission) || $this->hasPermissionViaRole($permission);
-}
-protected function hasPermissionToOriginal($permission, $guardName = null): bool
-    {
-        // This invokes Spatie's original trait function directly
-        return $this->hasPermissionViaRole($permission) || $this->hasDirectPermission($permission);
-    }
 }
