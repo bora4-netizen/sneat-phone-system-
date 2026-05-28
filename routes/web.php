@@ -23,10 +23,6 @@ use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\NetworkController;
 use App\Http\Controllers\GurantorController;
-use App\Http\Controllers\SalesController;
-
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -191,18 +187,11 @@ Route::group([
     Route::get('products/check/{id}', [ProductController::class, 'getProductById'])->name('get-product-by-id');
     Route::get('company/', [CompanySettingController::class, 'index'])->name('company.index');
     Route::put('company/', [CompanySettingController::class, 'update'])->name('company.update');
+    Route::get('/sales/create', [OrderController::class, 'create'])->name('sales.create');
 
-    // Incorrect
-Route::get('/sales/create', [SalesController::class, 'create']);
-
-// Correct
-Route::get('/sales/create', [SalesController::class, 'create'])->name('sales.create');
-
-// Explicit definition
-Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
-
-// Or using a resource (automatically creates 'orders.create')
-Route::resource('orders', OrderController::class);
-Route::get('/loan-payments', [LoanPaymentController::class, 'index']);
+  Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
+  Route::resource('orders', OrderController::class);
+  Route::resource('orders', OrderController::class)->only(['index', 'show']);
+  Route::get('/orders/create', [OrderController::class, 'create']);
+  Route::post('/branches/store', [OrderController::class, 'store'])->name('branches.store');
 });
-

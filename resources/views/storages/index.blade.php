@@ -75,7 +75,7 @@
 
 
 
-                                        <!-- <div class="row g-2">
+                                        <div class="row g-2">
                                             <div class="col mb-0">
                                                 <label for="emailBasic" class="form-label">Email</label>
                                                 <input type="text" id="emailBasic" class="form-control" placeholder="xxxx@xxx.xx">
@@ -84,7 +84,7 @@
                                                 <label for="dobBasic" class="form-label">DOB</label>
                                                 <input type="text" id="dobBasic" class="form-control" placeholder="DD / MM / YY">
                                             </div>
-                                        </div> -->
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{__('button.close')}}</button>
