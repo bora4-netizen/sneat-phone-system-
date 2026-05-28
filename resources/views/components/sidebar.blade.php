@@ -223,7 +223,7 @@
         <!-- POS Management -->
         @can(['order-create'])
         <li class="menu-item">
-          <a href="{{ route('orders.create', withLang()) }}" class="menu-link">
+            <a href="{{ route('sales.create', withLang()) }}" class="menu-link">
               <i class="menu-icon tf-icons fa-solid fa-cash-register"></i>
               <div data-i18n="{{__('sidebar.shop.orders.title')}}">{{__('sidebar.shop.orders.title')}}</div>
           </a>
