@@ -274,9 +274,7 @@ Route::group(['prefix'=>'order','as'=>'orders.'], function(){
 
   Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
   Route::resource('orders', OrderController::class);
+  Route::resource('orders', OrderController::class)->only(['index', 'show']);
+  Route::get('/orders/create', [OrderController::class, 'create']);
+  Route::post('/branches/store', [OrderController::class, 'store'])->name('branches.store');
 
-    // Incorrect
-// Route::get('/sales/create', [SalesController::class, 'create']);
-
-// If this exists elsewhere without the prefix, it conflicts
-Route::get('/orders', [OrderController::class, 'index'])->name('orders.index'); 

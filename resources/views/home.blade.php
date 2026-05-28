@@ -146,7 +146,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ((is_iterable($loanPayments) ? $loanPayments : []) as $payment)
+                        @forelse ($loanPayments as $payment)
                             <tr>
                                 <td>
                                     <strong>{{ $payment->loan->number ?? '' }}</strong>

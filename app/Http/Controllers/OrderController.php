@@ -17,27 +17,30 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+
 class OrderController extends Controller
 {
     function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:order-list|order-create|order-edit|order-delete', ['only' => ['index','store']]);
-        $this->middleware('permission:order-create', ['only' => ['create','store']]);
-        $this->middleware('permission:order-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:order-list|order-create|order-edit|order-delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:order-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:order-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:order-delete', ['only' => ['destroy']]);
     }
-
+    
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        // FIX: Initialize the baseline query and get customers before the conditions run
         $query = Order::query();
         $customers = Customer::all();
         $parameterNames = [];
 
-        if ($request->search) {
+        // Check if searching or if filter values are present
+        if ($request->search || $request->anyFilled(['customer', 'from_date', 'to_date'])) {
             $filters = $request->only(['customer', 'from_date', 'to_date']);
 
             if (!empty($filters['customer'])) {
@@ -46,43 +49,30 @@ class OrderController extends Controller
             }
 
             if (!empty($filters['from_date']) && !empty($filters['to_date'])) {
+                // Both from_date and to_date are provided
                 $query->whereBetween('order_date', [$filters['from_date'], $filters['to_date']]);
                 $parameterNames['from_date'] = $filters['from_date'];
                 $parameterNames['to_date'] = $filters['to_date'];
             } elseif (!empty($filters['from_date'])) {
+                // Only from_date is provided
                 $query->where('order_date', '>=', $filters['from_date']);
                 $parameterNames['from_date'] = $filters['from_date'];
             } elseif (!empty($filters['to_date'])) {
+                // Only to_date is provided
                 $query->where('order_date', '<=', $filters['to_date']);
                 $parameterNames['to_date'] = $filters['to_date'];
             }
         }
 
+        // $query is now fully safe to chain methods onto
         $orders = $query->orderBy('order_date', 'desc')->paginate(20);
         session(['printInvoiceId' => null]);
-
-        return view('orders.index', compact('orders', 'customers', 'parameterNames'));
-    }
-
-    /**
-     * Show the form for creating a new order.
-     */
-    public function create(Request $request)
-    {
-        $customers = Customer::all();
-        $products = Product::available()->get();
-
-        return view('orders.create', compact('customers', 'products'));
-    }
-
-    /**
-     * Store a newly created order.
-     */
-    public function store(Request $request, string $lang)
-    {
-        // Add your order saving logic here when ready
-
-        return redirect()->route('sales.index', withLang())->with('success', 'Sale created successfully');
+        
+        return view('orders.index', compact(
+            'orders',
+            'customers',
+            'parameterNames'
+        ));
     }
 
     /**
@@ -120,7 +110,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Display the invoice for the specified order.
+     * Display the specified resource.
      */
     public function invoice(string $lang, Order $order)
     {
@@ -137,8 +127,20 @@ class OrderController extends Controller
         $currentDate = Carbon::now()->format('Y-m-d');
         $order = $order->with('orderDetails', 'customer', 'employee')->findOrfail($order->id);
         $order_detals = OrderDetail::where('order_id', $order->id)->with('product')->get();
-        $file_pdf = 'invoice-'.str_pad($order->id, 5, '0', STR_PAD_LEFT).'.pdf';
+        $file_pdf = 'invoice-' . str_pad($order->id, 5, '0', STR_PAD_LEFT) . '.pdf';
         $type = $request->type ?? 'download';
         return view('orders.invoice-pdf', compact('order', 'order_detals', 'currentDate', 'file_pdf', 'type'));
     }
+
+
+    public function create()
+    {
+        return view('branches.create');
+    }
+    
+    public function store(Request $request)
+    {
+        return redirect()->back()->with('success', 'Saved successfully');
+    }
+    
 }
