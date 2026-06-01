@@ -91,8 +91,9 @@ class ColorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Color $color)
-    {
-        //
-    }
+    public function softdelete(Color $color)
+{
+    $color->delete();
+    return redirect()->route('color.index', withLang())->with('success', 'Deleted successfully');
+}
 }

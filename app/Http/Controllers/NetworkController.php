@@ -88,8 +88,9 @@ class NetworkController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Network $network)
-    {
-        //
-    }
+    public function softdelete(Network $network)
+{
+    $network->delete();
+    return redirect()->route('network.index', withLang())->with('success', 'Deleted successfully');
+}
 }

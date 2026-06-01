@@ -104,12 +104,14 @@ Route::group([
       });
     });
 
-    Route::group(['prefix'=>'model-type','as'=>'model_type.'], function(){
-        Route::get('/', [ModelTypeController::class, 'index'])->name('index');
-        Route::get('/create', [ModelTypeController::class, 'create'])->name('create');
-        Route::post('/store', [ModelTypeController::class, 'store'])->name('store');
-        Route::post('/update', [ModelTypeController::class, 'update'])->name('update');
-    });
+    Route::group(['prefix'=>'model_types','as'=>'model_type.'], function(){
+    Route::get('/', [ModelTypeController::class, 'index'])->name('index');
+    Route::get('/create', [ModelTypeController::class, 'create'])->name('create');
+    Route::post('/store', [ModelTypeController::class, 'store'])->name('store');
+    Route::post('/update/{model_type}', [ModelTypeController::class, 'update'])->name('update');
+    Route::delete('/destroy/{model_type}', [ModelTypeController::class, 'destroy'])->name('destroy');
+    
+});
     Route::group(['prefix'=>'network','as'=>'network.'], function(){
       Route::get('/', [NetworkController::class, 'index'])->name('index');
       Route::get('/create', [NetworkController::class, 'create'])->name('create');
@@ -191,7 +193,7 @@ Route::group([
 
   Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
   Route::resource('orders', OrderController::class);
-  Route::resource('orders', OrderController::class)->only(['index', 'show']);
-  Route::get('/orders/create', [OrderController::class, 'create']);
-  Route::post('/branches/store', [OrderController::class, 'store'])->name('branches.store');
 });
+
+// If this exists elsewhere without the prefix, it conflicts
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index'); 
