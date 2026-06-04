@@ -67,21 +67,7 @@
                     @endforelse
                 </tbody>
                   </tbody>
-                  <tfoot class="table-border-bottom-0">
-                    <tr>
-                      <th>#</th>
-                      <th>{{__('loan.no')}}</th>
-                      <th>{{__('loan.customer_name')}}</th>
-                      <th>{{__('loan.payment.due_date')}}</th>
-                      <th>{{__('loan.amount')}}</th>
-                      <th>{{__('loan.payment.types')}}</th>
-                      <th>{{__('loan.status')}}</th>
-                      <th>{{__('loan.payment.paid_date')}}</th>
-                        @can(['loan-payment-list'],['loan-payment-edit'], ['loan-payment-delete'])
-                        <th>Actions</th>
-                        @endcan
-                    </tr>
-                  </tfoot>
+                  
               </table>
               <div class="pagination">
                   {!! $payments->withQueryString()->appends(request()->except('page'))->links('pagination::bootstrap-5') !!}

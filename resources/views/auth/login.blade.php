@@ -36,8 +36,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                     <div class="app-brand justify-content-center">
-                                                    <img src="{{ asset('/assets/img/logo.png') }}" >
-                                        </div>
+                                            <img src="{{ $company->image_logo }}" alt="logo" width="100px"/>                                        </div>
                                     <h4 class="mb-2 text-center">{{ $company->name ?? 'CMy Phone ShopE' }}</h4>
                                     <p class="mb-4 text-center">Please sign-in to your account.</p>
                                     <form id="formAuthentication" class="mb-3" action="{{ route('login') }}" method="POST">

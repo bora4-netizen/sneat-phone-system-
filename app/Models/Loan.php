@@ -22,27 +22,25 @@ class Loan extends Model
       4 => 'Reject',
     ];
 
-
-    protected $fillable = [
-      'customer_id',
-      'employee_id',
-      'product_id',
-      'amount',
-      'first_amount',
-      'interest',
-      'duration',
-      'amount_principal',
-      'amount_interest',
-      'remain',
-      'interest_remain',
-      'payable_amount',
-      'date',
-      'next_payment_date',
-      'status',
-      'note',
-      'phone_profit'
-  ];
-
+protected $fillable = [
+    'customer_id',
+    'employee_id',
+    'product_id',
+    'amount',
+    'first_amount',
+    'interest',
+    'duration',
+    'amount_principal',
+    'amount_interest',
+    'payable_amount',
+    'remain',
+    'interest_remain',
+    'date',
+    'next_payment_date',
+    'status',
+    'note',
+    'phone_profit'
+];
   protected $dates = ['deleted_at'];
 
     public function customer()

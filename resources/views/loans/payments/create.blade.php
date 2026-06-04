@@ -24,7 +24,6 @@
                                   <select id="loan_id" class="select2 form-select @error('loan_id') is-invalid @enderror" name="loan_id">
                                     <option value="" disabled selected>{{__('common.lbl_select')}}</option>
                                     @foreach ($loans as $loan)
-                                        <option></option>
                                         <option  value="{{ $loan->id }}" @if(old('loan_id') == $loan->id) selected @endif data-value="[{{ $loan->monthly_payment }}, {{ $loan->remain }}, {{ $loan->amount_paying_off }}]" data-date="{{ $loan->next_payment_date }}">{{ $loan->number }} ( {{ $loan->customer->name }} ) | ( {{ setToStringDolla($loan->payable_amount) }} )</option>
                                     @endforeach
                                 </select>

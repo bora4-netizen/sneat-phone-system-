@@ -7,6 +7,12 @@
 <div class="content-wrapper">
     <!-- Content -->
     <div class="container-fluid flex-grow-1 container-p-y">
+        @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
       @can(['loan-list'],['loan-payment-create'])
         <div class="row">

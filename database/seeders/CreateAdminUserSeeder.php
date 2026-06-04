@@ -24,28 +24,25 @@ class CreateAdminUserSeeder extends Seeder
         // 2. Create or get role
         $role = Role::firstOrCreate([
             'name' => 'Administrator',
-            
         ]);
 
-        // 3. Sync all permissions to role (if exists)
+        // 3. Sync all permissions to role
         $permissions = Permission::pluck('name')->toArray();
         $role->syncPermissions($permissions);
 
-        // 4. Assign role to user (IMPORTANT)
+        // 4. Assign role to user
         $user->assignRole($role);
 
-        // 5. Create employee profile (avoid duplicate)
-        $employee = Employee::updateOrCreate(
-            ['user_id' => $user->id],
-            [
-                'name' => '',
-                'latin_name' => '',
-                'phone' => '',
-                'position_id' => null,
-            ]
-        );
 
-        // 6. Link relationship (only if needed)
-        // $user->employee()->save($employee);
+        // 6. Create employee profile
+       $employee = Employee::updateOrCreate(
+    ['user_id' => $user->id],
+    [
+        'name' => 'Admin',
+        'latin_name' => 'Admin',
+        'phone' => '012345678',
+        'position_id' => 1,
+    ]
+);
     }
 }

@@ -30,9 +30,32 @@ class LoanController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
-        $query = Loan::query();
+{
+    $query = Loan::with('customer')->latest();
+
+    if ($request->search) {
+        if ($request->search_loan) {
+            $query->whereHas('customer', function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search_loan . '%');
+            });
+        }
+        if ($request->customer) {
+            $query->where('customer_id', $request->customer);
+        }
+        if ($request->from_date) {
+            $query->whereDate('date', '>=', $request->from_date);
+        }
+        if ($request->to_date) {
+            $query->whereDate('date', '<=', $request->to_date);
+        }
     }
+
+    $loans = $query->paginate(15);
+    $customers = Customer::pluck('name', 'id');
+    $parameterNames = $request->all();
+
+    return view('loans.index', compact('loans', 'customers', 'parameterNames'));
+}
 
     /**
      * Show the form for creating a new loan.
@@ -40,16 +63,24 @@ class LoanController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-      $currentNow = Carbon::now();
-      $currentDate = $currentNow->format('d/m/Y');
-      $customers = Customer::loanable()->get();
-      $availableProducts = Product::available()->get();
-      $statusOptions = Loan::STATUS;
-      $defaultNote = Loan::latest()->first()->id ?? 0;
+{
+    $currentNow = Carbon::now();
 
-      return view('loans.create', compact('currentDate', 'customers', 'availableProducts', 'statusOptions', 'defaultNote'));
-    }
+    // $currentDate = $currentNow->format('d/m/Y');
+    $currentDate = $currentNow->format('Y-m-d');
+
+    $customers = Customer::all();
+
+    $availableProducts = Product::available()->get();
+
+    $statusOptions = Loan::STATUS;
+
+    $defaultNote = Loan::latest()->first()->id ?? 0;
+
+    return view(
+        'loans.create',compact('currentDate','customers','availableProducts','statusOptions','defaultNote')
+    );
+}
 
     /**
      * Store a newly created loan in storage.
@@ -57,65 +88,55 @@ class LoanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $employeeId = Auth::user()->id;
-        $request->merge(["employee_id"=> $employeeId]);
-        $data = $request->validate([
-            'customer_id' => 'required|exists:customers,id',
-            'employee_id' => 'required|exists:employees,id',
-            'product_id' => 'required|exists:products,id',
-            'amount' => 'required',
-            'first_amount' => 'required',
-            'interest' => 'required',
-            'duration' => 'required|not_in:0',
-            'amount_principal' => 'required',
-            'amount_interest' => 'required',
-            'payable_amount' => 'required',
-            'date' => 'required|date',
-            'status' => 'required',
-            'customer_id_card' => 'required',
-            'customer_family_book' => 'required',
-            'customer_birth_certificate' => 'required',
-            'guarantor_id_card' => 'required',
-            'guarantor_family_book' => 'required',
-            'guarantor_birth_certificate' => 'required',
-        ]);
+public function store(Request $request)
+{
+    // 1. Validate only needed fields
+    $request->validate([
+  
+        'customer_id' => 'required|exists:customers,id',
+        'product_id' => 'required|exists:products,id',
+        'amount' => 'required',
+        'first_amount' => 'required',
+        'interest' => 'required',
+        'duration' => 'required|not_in:0',
+        'amount_principal' => 'required',
+        'amount_interest' => 'required',
+        'payable_amount' => 'required',
+        'date' => 'required|date',
+        'status' => 'required',
+    ]);
 
-        $loanDocumentData = [
-          'customer_id_card' => $request->customer_id_card,
-          'customer_family_book' => $request->customer_family_book,
-          'customer_birth_certificate' => $request->customer_birth_certificate,
-          'customer_other' => $request->customer_other,
-          'guarantor_id_card' => $request->guarantor_id_card,
-          'guarantor_family_book' => $request->guarantor_family_book,
-          'guarantor_birth_certificate' => $request->guarantor_birth_certificate,
-          'guarantor_other' => $request->guarantor_other,
-        ];
+    // 2. Get product (IMPORTANT)
+    $product = Product::findOrFail($request->product_id);
 
-        $data['note'] = $request->note;
-        $data['remain'] = $request->payable_amount;
-        $data['interest_remain'] = $request->duration * $request->amount_interest;
-        $nextPaymentDate = date('Y-m-d', strtotime($request->date . ' +1 month'));
-        $data['next_payment_date'] = $nextPaymentDate;
-        $loan = Loan::create($data);
-        $purchasedPrice = $loan->product->purchase_price;
-        $soldPrice = $loan->product->selling_price;
-        $phoneProfit = $soldPrice - $purchasedPrice;
-        $data['phone_profit'] = $phoneProfit;
-        $loan->update($data);
-        if ($file = $request->file('file')) {
-          $zipFileName = $this->uploadFileZip($loan, $file );
-          $loan->file = $zipFileName;
-          $loan->save();
-        }
-        $loan->product->update(['status' => Product::STATUS_ID_SOLD]);
-        $loan->document()->create(
-          $loanDocumentData
-        );
+    // 3. Build clean data (ONLY DB columns)
+    $data = [
+        'customer_id' => $request->customer_id,
+        'employee_id' => Auth::id(),
+        'product_id' => $request->product_id,
+        'amount' => $request->amount,
+        'first_amount' => $request->first_amount,
+        'interest' => $request->interest,
+        'duration' => $request->duration,
+        'amount_principal' => $request->amount_principal,
+        'amount_interest' => $request->amount_interest,
+        'payable_amount' => $request->payable_amount,
+        'date' => $request->date,
+        'status' => $request->status,
 
-        return redirect()->route('loans.invoice', withLang(['loan' => $loan->id]))->with('success', 'Loan created successfully');
-    }
+        'note' => $request->note,
+        'remain' => $request->payable_amount,
+        'interest_remain' => $request->duration * $request->amount_interest,
+        'next_payment_date' => date('Y-m-d', strtotime($request->date . ' +1 month')),
+        'phone_profit' => $product->selling_price - $product->purchase_price,
+    ];
+
+    // 4. CREATE LOAN (this should work now)
+    $loan = Loan::create($data);
+
+    // return back()->with('success', 'Loan created successfully');
+    return redirect()->route('loans.index', withLang())->with('success', 'Loan created successfully');
+}
 
     /**
      * Show the form for editing the specified loan.

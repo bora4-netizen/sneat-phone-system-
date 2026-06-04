@@ -26,8 +26,10 @@ return new class extends Migration
             $table->string('amount_interest');
             $table->string('payable_amount');
             $table->string('remain')->default(0)->nullable();
-            $table->date('date')->format('d/m/Y');
-            $table->date('next_payment_date')->format('d/m/Y')->nullable();
+            // $table->date('date')->format('d/m/Y');
+            // $table->date('next_payment_date')->format('d/m/Y')->nullable();
+            $table->date('date');
+            $table->date('next_payment_date')->nullable();
             $table->string('file')->nullable();
             $table->text('note')->nullable();
             $table->softDeletes();

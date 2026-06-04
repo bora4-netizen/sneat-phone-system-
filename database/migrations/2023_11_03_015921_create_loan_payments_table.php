@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('loan_payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('loan_id')->references('id')->on('loans')->cascadeOnDelete()->comment('loans.id');
-            $table->foreignId('employee_id')->references('id')->on('employees')->cascadeOnDelete()->comment('employees.id');
+            // $table->foreignId('employee_id')->references('id')->on('employees')->cascadeOnDelete()->comment('employees.id');
+            $table->foreignId('employee_id')->constrained('employees')->cascadeOnDelete();
             $table->string('amount');
             $table->integer('payment_status')->default(1)->comment('1:Monthly, 2:Paying Off');
             $table->integer('payment_type')->default(1)->comment('1:CASH, 2:BANK, 3:OTHER');
-            $table->date('date')->format('d/m/Y');
+            // $table->date('date')->format('d/m/Y');
+            $table->date('date');
             $table->string('remain')->default(0)->nullable();
             $table->string('image')->nullable();
             $table->text('note')->nullable();

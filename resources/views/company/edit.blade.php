@@ -41,6 +41,8 @@
                                             accept="image/png, image/jpeg"
                                         />
                                     </label>
+
+                                    <!-- {{--  Reset Button - no change needed here --}} -->
                                     <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
                                         <i class="bx bx-reset d-block d-sm-none"></i>
                                         <span class="d-none d-sm-block">{{ __('common.lbl_reset') }}</span>
@@ -97,7 +99,6 @@
                                             @enderror
                                         </div>
                                     </div>
-
                                     <div class="mb-3 col-md-6">
                                       <label for="detail" class="form-label">Company Detail</label>
                                       <textarea class="form-control" id="detail" name="detail" placeholder="">{{ old('detail', $company->detail ?? '')}}</textarea>
@@ -115,10 +116,10 @@
                                       <textarea class="form-control" id="address" name="address" placeholder="Address">{{ old('address', $company->address ?? '')}}</textarea>
                                     </div>
 
-
                                 <div class="mt-2">
                                     <button type="submit" class="btn btn-primary me-2">Save changes</button>
-                                    <button type="reset" class="btn btn-outline-secondary">Cancel</button>
+                                    <!-- {{--  FIXED: changed type="reset" to type="button" + added id="cancelBtn" --}} -->
+                                    <button type="button" id="cancelBtn" class="btn btn-outline-secondary">Cancel</button>
                                 </div>
                         </div>
                     </form>
@@ -132,41 +133,68 @@
 </div>
 <!-- Content wrapper -->
 @endsection
-@push('script')
-    <script>
-        $(document).ready(function() {
-            // Add an event listener to the "confirm" checkbox
-            $('#confirm').change(function() {
-                if ($(this).is(':checked')) {
-                    // If the checkbox is checked, enable the submit button
-                    $('.deactivate-account').prop('disabled', false);
-                } else {
-                    // If the checkbox is not checked, disable the submit button
-                    $('.deactivate-account').prop('disabled', true);
-                }
-            });
-            $("#upload").on("change", function(e){
-                var file = e.target.files[0];
-                var mediabase64data;
-                getBase64(file).then(
-                    mediabase64data => $('#uploadedAvatar').attr('src', mediabase64data)
-                );
-            });
 
-            $('.account-image-reset').click(function(){
-                var mediaUserdata = $('.mediaUserdata').val();
-                $('#uploadedAvatar').attr('src', mediaUserdata);
+@push('script')
+<script>
+    $(document).ready(function() {
+
+        //  Save original values when page loads
+        var originalValues = {
+            name: $('#name').val(),
+            interest: $('#interest').val(),
+            phone: $('#phone').val(),
+            detail: $('#detail').val(),
+            default_loan_note: $('#default_loan_note').val(),
+            default_invoice_note: $('#default_invoice_note').val(),
+            address: $('#address').val(),
+            avatar: $('.mediaUserdata').val()
+        };
+
+        // Upload new photo preview
+        $("#upload").on("change", function(e) {
+            var file = e.target.files[0];
+            getBase64(file).then(function(mediabase64data) {
+                $('#uploadedAvatar').attr('src', mediabase64data);
             });
-            function getBase64(file) {
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(file);
-                    reader.onload = () => resolve(reader.result);
-                    reader.onerror = error => reject(error);
-                });
+        });
+
+        //  FIXED Reset Button — resets avatar + clears file input
+        $('.account-image-reset').on('click', function() {
+            var mediaUserdata = $('.mediaUserdata').val();
+            $('#uploadedAvatar').attr('src', mediaUserdata);
+            $('#upload').val(''); // ← this was missing before
+        });
+
+        //  FIXED Cancel Button — restores all fields to original values
+        $('#cancelBtn').on('click', function() {
+            $('#name').val(originalValues.name);
+            $('#interest').val(originalValues.interest);
+            $('#phone').val(originalValues.phone);
+            $('#detail').val(originalValues.detail);
+            $('#default_loan_note').val(originalValues.default_loan_note);
+            $('#default_invoice_note').val(originalValues.default_invoice_note);
+            $('#address').val(originalValues.address);
+            $('#uploadedAvatar').attr('src', originalValues.avatar);
+            $('#upload').val(''); // clear file input too
+        });
+
+        // Confirm checkbox (keep existing)
+        $('#confirm').change(function() {
+            if ($(this).is(':checked')) {
+                $('.deactivate-account').prop('disabled', false);
+            } else {
+                $('.deactivate-account').prop('disabled', true);
             }
         });
 
-
-    </script>
+        function getBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+    });
+</script>
 @endpush
