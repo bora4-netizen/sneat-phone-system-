@@ -112,8 +112,8 @@
       </div>
 <!-- / Content -->
 <div class="modal fade" id="loanSearchModal" tabindex="-1" aria-hidden="true">
-  <form method="GET" action="{{ url()->current() }}">
-      <div class="modal-dialog modal-xl" role="document">
+<form method="GET" action="{{ route('loans.index', withLang()) }}">
+          <div class="modal-dialog modal-xl" role="document">
           <div class="modal-content">
               <div class="modal-header">
                   <h5 class="modal-title" id="productSearchLabel">{{ __('common.lbl_search') }}</h5>
@@ -170,6 +170,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.js"></script>
+
 <style>
     .select2{
         width: 100% !important;
@@ -192,13 +193,19 @@
         top: 8px;
     }
 </style>
-    <script>
-        $(document).ready( function(){
+  <script>
+    $(document).ready(function(){
+        $('#loanSearchModal').on('shown.bs.modal', function() {
             $("#customer").select2({
-            dropdownParent: $('#loanSearchModal'),
-            placeholder: "សូមជ្រើសរើសអតិថិជន",
-            allowClear: true
+                dropdownParent: $('#loanSearchModal'),
+                placeholder: "សូមជ្រើសរើសអតិថិជន",
+                allowClear: true
+            });
         });
-        })
-    </script>
+
+        $(document).on('submit', '#loanSearchModal form', function(e){
+            e.stopPropagation();
+        });
+    });
+</script>
 @endpush

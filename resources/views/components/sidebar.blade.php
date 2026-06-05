@@ -1,17 +1,29 @@
 <!-- Menu -->
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-    <div class="app-brand custom">
-        <a href="{{ route('home') }}" class="app-brand-link">
-            <span class="app-brand-logo custom">
-            
-            </span>
-            <span class="app-brand-text custom menu-text fw-bolder ms-2">{{ $company->name ?? ''}}</span>
+   
+
+            <div class="app-brand custom">
+                <a href="{{ route('home') }}" class="app-brand-link">
+                    <span class="app-brand-logo custom">
+                        <img
+                            src="{{ $company->image_logo ?? asset('/assets/img/blank-profile.png') }}"
+                            alt="logo"
+                            height="50"
+                            width="50"
+                            id="sidebarLogo"
+                            style="border-radius: 6px; object-fit: cover;"
+                            onError="this.onerror=null;this.src='{{ asset('/assets/img/blank-profile.png') }}';" />
+                    </span>
+                    <span class="app-brand-text custom menu-text fw-bolder ms-2">{{ $company->name ?? ''}}</span>
+                </a>
+                <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                    <i class="bx bx-chevron-left bx-sm align-middle"></i>
+           
         </a>
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
         </a>
     </div>
-    <div class="menu-inner-shadow"></div>
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
         <li class="menu-item{{ (request()->routeIs('dashboard')) ? ' active' : '' }}">
@@ -31,20 +43,20 @@
                 <div data-i18n="{{__('sidebar.product_info.category')}}">{{__('customer.menu.title')}}</div>
             </a>
             <ul class="menu-sub">
-              @can(['customer-list'])
-              <li class="menu-item">
-                <a href="{{ route('customers.create', withLang()) }}" class="menu-link">
-                  <div data-i18n="{{__('common.lbl_add_new')}}">{{__('common.lbl_add_new')}}</div>
-                </a>
-              </li>
-              @endif
-              @can(['customer-create'])
-              <li class="menu-item">
-                <a href="{{ route('customers.index', withLang()) }}" class="menu-link">
-                  <div data-i18n="{{__('sidebar.product_info.model_type')}}">{{__('customer.menu.list')}}</div>
-                </a>
-              </li>
-              @endif
+                @can(['customer-list'])
+                <li class="menu-item">
+                    <a href="{{ route('customers.create', withLang()) }}" class="menu-link">
+                        <div data-i18n="{{__('common.lbl_add_new')}}">{{__('common.lbl_add_new')}}</div>
+                    </a>
+                </li>
+                @endif
+                @can(['customer-create'])
+                <li class="menu-item">
+                    <a href="{{ route('customers.index', withLang()) }}" class="menu-link">
+                        <div data-i18n="{{__('sidebar.product_info.model_type')}}">{{__('customer.menu.list')}}</div>
+                    </a>
+                </li>
+                @endif
             </ul>
         </li>
         <!-- /Customers Management -->
@@ -52,7 +64,7 @@
 
         <!-- Shop Management -->
         <li class="menu-header small text-uppercase"><span class="menu-header-text">{{__('sidebar.shop.title')}}</span></li>
-         <!-- Product Management -->
+        <!-- Product Management -->
         @can(['product-list'], ['product-create'])
         <li class="menu-item {{ (request()->routeIs('products*')) ? ' active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -61,18 +73,18 @@
             </a>
             <ul class="menu-sub">
                 @can('product-create')
-                  <li class="menu-item {{ (request()->routeIs('products.create')) ? ' active' : '' }}">
+                <li class="menu-item {{ (request()->routeIs('products.create')) ? ' active' : '' }}">
                     <a href="{{ route('products.create', withLang()) }}" class="menu-link">
                         <div data-i18n="{{__('comman.lbl_add_new')}}">{{__('common.lbl_add_new')}}</div>
                     </a>
-                  </li>
+                </li>
                 @endcan
                 @can('product-list')
-                  <li class="menu-item{{ (request()->routeIs('products.index')) ? ' active' : '' }}">
-                      <a href="{{ route('products.index', withLang()) }}" class="menu-link">
-                          <div data-i18n="{{__('sidebar.shop.product_list')}}">{{__('sidebar.shop.product_list')}}</div>
-                      </a>
-                  </li>
+                <li class="menu-item{{ (request()->routeIs('products.index')) ? ' active' : '' }}">
+                    <a href="{{ route('products.index', withLang()) }}" class="menu-link">
+                        <div data-i18n="{{__('sidebar.shop.product_list')}}">{{__('sidebar.shop.product_list')}}</div>
+                    </a>
+                </li>
                 @endcan
             </ul>
         </li>
@@ -98,29 +110,29 @@
                 </li>
 
                 <li class="menu-item{{ (request()->routeIs('serial.index')) ? ' active' : '' }}">
-                  <a href="{{ route('serial.index', withLang()) }}" class="menu-link">
-                      <div data-i18n="{{__('sidebar.product_info.serial')}}">{{__('sidebar.product_info.serial')}}</div>
-                  </a>
+                    <a href="{{ route('serial.index', withLang()) }}" class="menu-link">
+                        <div data-i18n="{{__('sidebar.product_info.serial')}}">{{__('sidebar.product_info.serial')}}</div>
+                    </a>
                 </li>
 
 
                 <li class="menu-item{{ (request()->routeIs('storage.index')) ? ' active' : '' }}">
-                  <a href="{{ route('storage.index', withLang()) }}" class="menu-link">
-                      <div data-i18n="{{__('sidebar.product_info.storage')}}">{{__('sidebar.product_info.storage')}}</div>
-                  </a>
+                    <a href="{{ route('storage.index', withLang()) }}" class="menu-link">
+                        <div data-i18n="{{__('sidebar.product_info.storage')}}">{{__('sidebar.product_info.storage')}}</div>
+                    </a>
                 </li>
 
 
                 <li class="menu-item{{ (request()->routeIs('brand.index')) ? ' active' : '' }}">
-                  <a href="{{ route('brand.index', withLang()) }}" class="menu-link">
-                      <div data-i18n="{{__('sidebar.product_info.brand')}}">{{__('sidebar.product_info.brand')}}</div>
-                  </a>
+                    <a href="{{ route('brand.index', withLang()) }}" class="menu-link">
+                        <div data-i18n="{{__('sidebar.product_info.brand')}}">{{__('sidebar.product_info.brand')}}</div>
+                    </a>
                 </li>
 
                 <li class="menu-item{{ (request()->routeIs('network.index')) ? ' active' : '' }}">
-                  <a href="{{ route('network.index', withLang()) }}" class="menu-link">
-                      <div data-i18n="{{__('sidebar.product_info.network')}}">{{__('sidebar.product_info.network')}}</div>
-                  </a>
+                    <a href="{{ route('network.index', withLang()) }}" class="menu-link">
+                        <div data-i18n="{{__('sidebar.product_info.network')}}">{{__('sidebar.product_info.network')}}</div>
+                    </a>
                 </li>
 
             </ul>
@@ -139,16 +151,16 @@
                 @can('expense-list')
                 @can('expense-create')
                 <li class="menu-item {{ (request()->routeIs('expenses.create')) ? ' active' : '' }}">
-                  <a href="{{ route('expenses.create', withLang()) }}" class="menu-link">
-                      <div data-i18n="{{__('common.lbl_add_new')}}">{{__('common.lbl_add_new')}}</div>
-                  </a>
+                    <a href="{{ route('expenses.create', withLang()) }}" class="menu-link">
+                        <div data-i18n="{{__('common.lbl_add_new')}}">{{__('common.lbl_add_new')}}</div>
+                    </a>
                 </li>
                 @endcan
-                  <li class="menu-item {{ (request()->routeIs('expenses.index')) ? ' active' : '' }}">
-                      <a href="{{ route('expenses.index', withLang()) }}" class="menu-link">
-                          <div data-i18n="{{__('expense.title')}}">{{__('expense.title')}}</div>
-                      </a>
-                  </li>
+                <li class="menu-item {{ (request()->routeIs('expenses.index')) ? ' active' : '' }}">
+                    <a href="{{ route('expenses.index', withLang()) }}" class="menu-link">
+                        <div data-i18n="{{__('expense.title')}}">{{__('expense.title')}}</div>
+                    </a>
+                </li>
                 @endcan
             </ul>
         </li>
@@ -163,18 +175,18 @@
             </a>
             <ul class="menu-sub">
                 @can('order-create')
-                  <li class="menu-item{{ (request()->routeIs('sales.create')) ? ' active' : '' }}">
-                      <a href="{{ route('sales.create', withLang()) }}" class="menu-link">
-                          <div data-i18n="{{__('common.lbl_add_new')}}">{{__('common.lbl_add_new')}}</div>
-                      </a>
-                  </li>
+                <li class="menu-item{{ (request()->routeIs('sales.create')) ? ' active' : '' }}">
+                    <a href="{{ route('sales.create', withLang()) }}" class="menu-link">
+                        <div data-i18n="{{__('common.lbl_add_new')}}">{{__('common.lbl_add_new')}}</div>
+                    </a>
+                </li>
                 @endcan
                 @can('order-list')
-                  <li class="menu-item{{ (request()->routeIs('sales.index')) ? ' active' : '' }}">
-                      <a href="{{ route('sales.index', withLang()) }}" class="menu-link">
-                          <div data-i18n="{{__('sidebar.shop.orders.invoices_list')}}">{{__('sidebar.shop.orders.invoices_list')}}</div>
-                      </a>
-                  </li>
+                <li class="menu-item{{ (request()->routeIs('sales.index')) ? ' active' : '' }}">
+                    <a href="{{ route('sales.index', withLang()) }}" class="menu-link">
+                        <div data-i18n="{{__('sidebar.shop.orders.invoices_list')}}">{{__('sidebar.shop.orders.invoices_list')}}</div>
+                    </a>
+                </li>
                 @endcan
             </ul>
         </li>
@@ -189,32 +201,32 @@
             </a>
             <ul class="menu-sub">
                 @can('loan-create')
-                  <li class="menu-item{{ (request()->routeIs('loans.create')) ? ' active' : '' }}">
-                      <a href="{{ route('loans.create', withLang()) }}" class="menu-link">
-                          <div data-i18n="{{__('common.lbl_add_new')}}">{{__('common.lbl_add_new')}}</div>
-                      </a>
-                  </li>
+                <li class="menu-item{{ (request()->routeIs('loans.create')) ? ' active' : '' }}">
+                    <a href="{{ route('loans.create', withLang()) }}" class="menu-link">
+                        <div data-i18n="{{__('common.lbl_add_new')}}">{{__('common.lbl_add_new')}}</div>
+                    </a>
+                </li>
                 @endcan
                 @can('loan-list')
-                  <li class="menu-item{{ (request()->routeIs('loans.index')) ? ' active' : '' }}">
-                      <a href="{{ route('loans.index', withLang()) }}" class="menu-link">
-                          <div data-i18n="{{__('loan.list')}}">{{__('loan.list')}}</div>
-                      </a>
-                  </li>
+                <li class="menu-item{{ (request()->routeIs('loans.index')) ? ' active' : '' }}">
+                    <a href="{{ route('loans.index', withLang()) }}" class="menu-link">
+                        <div data-i18n="{{__('loan.list')}}">{{__('loan.list')}}</div>
+                    </a>
+                </li>
                 @endcan
                 @can('loan-payment-list')
-                  <li class="menu-item{{ (request()->routeIs('loans.payments.index')) ? ' active' : '' }}">
-                      <a href="{{ route('loans.payments.index', withLang()) }}" class="menu-link">
-                          <div data-i18n="{{__('loan.payment.title')}}">{{__('loan.payment.title')}}</div>
-                      </a>
-                  </li>
+                <li class="menu-item{{ (request()->routeIs('loans.payments.index')) ? ' active' : '' }}">
+                    <a href="{{ route('loans.payments.index', withLang()) }}" class="menu-link">
+                        <div data-i18n="{{__('loan.payment.title')}}">{{__('loan.payment.title')}}</div>
+                    </a>
+                </li>
                 @endcan
                 @can('loan-payment-list')
-                  <li class="menu-item{{ (request()->routeIs('loans.payments.late')) ? ' active' : '' }}">
-                      <a href="{{ route('loans.payments.late', withLang()) }}" class="menu-link">
-                          <div data-i18n="{{__('loan.late_payment')}}">{{__('loan.late_payment')}}</div>
-                      </a>
-                  </li>
+                <li class="menu-item{{ (request()->routeIs('loans.payments.late')) ? ' active' : '' }}">
+                    <a href="{{ route('loans.payments.late', withLang()) }}" class="menu-link">
+                        <div data-i18n="{{__('loan.late_payment')}}">{{__('loan.late_payment')}}</div>
+                    </a>
+                </li>
                 @endcan
             </ul>
         </li>
@@ -223,54 +235,54 @@
         <!-- POS Management -->
         @can(['order-create'])
         <li class="menu-item">
-          <a href="{{ route('orders.create', withLang()) }}" class="menu-link">
-              <i class="menu-icon tf-icons fa-solid fa-cash-register"></i>
-              <div data-i18n="{{__('sidebar.shop.orders.title')}}">{{__('sidebar.shop.orders.title')}}</div>
-          </a>
+            <a href="{{ route('orders.create', withLang()) }}" class="menu-link">
+                <i class="menu-icon tf-icons fa-solid fa-cash-register"></i>
+                <div data-i18n="{{__('sidebar.shop.orders.title')}}">{{__('sidebar.shop.orders.title')}}</div>
+            </a>
         </li>
         @endcan
         <!-- /POS Management -->
         <!-- Report Management -->
         @can(['report-list'])
         <li class="menu-item{{ (request()->routeIs('reports*')) ? ' active open' : '' }}">
-          <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <i class="menu-icon tf-icons fa-solid fa-chart-line"></i>
-            <div data-i18n="{{__('report.title')}}">{{__('report.title')}}</div>
-          </a>
-          @can('role-list')
-          <ul class="menu-sub">
-              <li class="menu-item{{ (request()->routeIs('reports.product')) ? ' active' : '' }}">
-                <a href="{{ route('reports.product', withLang()) }}" class="menu-link">
-                    <div data-i18n="{{__('report.product.title')}}">{{__('report.product.title')}}</div>
-                </a>
-              </li>
-              <li class="menu-item{{ (request()->routeIs('reports.stock')) ? ' active' : '' }}">
-                  <a href="{{ route('reports.stock', withLang()) }}" class="menu-link">
-                      <div data-i18n="Role Management">{{__('report.stock.title')}}</div>
-                  </a>
-              </li>
-              <li class="menu-item{{ (request()->routeIs('reports.expense')) ? ' active' : '' }}">
-                <a href="{{ route('reports.expense', withLang()) }}" class="menu-link">
-                    <div data-i18n="Role Management">{{__('report.expense.title')}}</div>
-                </a>
-              </li>
-              <li class="menu-item{{ (request()->routeIs('reports.sale')) ? ' active' : '' }}">
-                <a href="{{ route('reports.sale', withLang()) }}" class="menu-link">
-                  <div data-i18n="Role Management">{{__('report.sale.title')}}</div>
-                </a>
-              </li>
-              <li class="menu-item{{ (request()->routeIs('reports.loan')) ? ' active' : '' }}">
-                <a href="{{ route('reports.loan', withLang()) }}" class="menu-link">
-                    <div data-i18n="Role Management">{{__('report.loan.title')}}</div>
-                </a>
-              </li>
-              <li class="menu-item{{ (request()->routeIs('reports.profit-loss')) ? ' active' : '' }}">
-                <a href="{{ route('reports.profit-loss', withLang()) }}" class="menu-link">
-                    <div data-i18n="Role Management">{{__('report.profit_loss.title')}}</div>
-                </a>
-              </li>
-          </ul>
-          @endcan
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons fa-solid fa-chart-line"></i>
+                <div data-i18n="{{__('report.title')}}">{{__('report.title')}}</div>
+            </a>
+            @can('role-list')
+            <ul class="menu-sub">
+                <li class="menu-item{{ (request()->routeIs('reports.product')) ? ' active' : '' }}">
+                    <a href="{{ route('reports.product', withLang()) }}" class="menu-link">
+                        <div data-i18n="{{__('report.product.title')}}">{{__('report.product.title')}}</div>
+                    </a>
+                </li>
+                <li class="menu-item{{ (request()->routeIs('reports.stock')) ? ' active' : '' }}">
+                    <a href="{{ route('reports.stock', withLang()) }}" class="menu-link">
+                        <div data-i18n="Role Management">{{__('report.stock.title')}}</div>
+                    </a>
+                </li>
+                <li class="menu-item{{ (request()->routeIs('reports.expense')) ? ' active' : '' }}">
+                    <a href="{{ route('reports.expense', withLang()) }}" class="menu-link">
+                        <div data-i18n="Role Management">{{__('report.expense.title')}}</div>
+                    </a>
+                </li>
+                <li class="menu-item{{ (request()->routeIs('reports.sale')) ? ' active' : '' }}">
+                    <a href="{{ route('reports.sale', withLang()) }}" class="menu-link">
+                        <div data-i18n="Role Management">{{__('report.sale.title')}}</div>
+                    </a>
+                </li>
+                <li class="menu-item{{ (request()->routeIs('reports.loan')) ? ' active' : '' }}">
+                    <a href="{{ route('reports.loan', withLang()) }}" class="menu-link">
+                        <div data-i18n="Role Management">{{__('report.loan.title')}}</div>
+                    </a>
+                </li>
+                <li class="menu-item{{ (request()->routeIs('reports.profit-loss')) ? ' active' : '' }}">
+                    <a href="{{ route('reports.profit-loss', withLang()) }}" class="menu-link">
+                        <div data-i18n="Role Management">{{__('report.profit_loss.title')}}</div>
+                    </a>
+                </li>
+            </ul>
+            @endcan
         </li>
         @endcan
         <!-- /Report Management -->
@@ -279,10 +291,10 @@
         <li class="menu-header small text-uppercase"><span class="menu-header-text">{{__('sidebar.shop.setting')}}</span></li>
         @can('company-setting-edit')
         <li class="menu-item{{ (request()->routeIs('company*')) ? ' active' : '' }}">
-          <a href="{{ route('company.index', withLang()) }}" class="menu-link">
-            <i class="menu-icon tf-icons fa-solid fa-shop"></i>
-            <div data-i18n="Shop Information">{{__('sidebar.shop.info')}}</div>
-        </a>
+            <a href="{{ route('company.index', withLang()) }}" class="menu-link">
+                <i class="menu-icon tf-icons fa-solid fa-shop"></i>
+                <div data-i18n="Shop Information">{{__('sidebar.shop.info')}}</div>
+            </a>
         </li>
         @endcan
         <li class="menu-header small text-uppercase"><span class="menu-header-text">{{__('sidebar.user.management')}}</span></li>
