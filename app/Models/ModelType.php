@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\SoftDeletes; // ✅ import នៅទីនេះ
 
 class ModelType extends Model
 {
-        use SoftDeletes;
+    use SoftDeletes; // ✅ use នៅទីនេះ
 
     protected $fillable = ['name'];
 
@@ -15,5 +15,4 @@ class ModelType extends Model
     {
         return $this->hasMany(Product::class, 'model_type_id');
     }
-
-}
+}   

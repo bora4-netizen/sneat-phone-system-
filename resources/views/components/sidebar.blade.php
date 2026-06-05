@@ -168,7 +168,7 @@
         <!-- /Expense Management -->
         <!-- Order Management -->
         @can(['order-list'], ['order-create'])
-        <li class="menu-item{{ (request()->routeIs('sales*')) ? ' active open' : '' }}">
+        <li class="menu-item{{ (request()->routeIs('sales*') && !request()->routeIs('orders*')) ? ' active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bxs-cart-alt"></i>
                 <div data-i18n="{{__('sidebar.shop.product')}}">{{__('sidebar.shop.sales.title')}}</div>

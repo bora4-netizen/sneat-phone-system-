@@ -91,9 +91,9 @@ class BrandController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function softdelete (Brand $brand)
+    public function destroy(string $lang, Brand $brand)
 {
-    $brand->delete();
+    $brand->delete(); 
     return redirect()->route('brand.index', withLang())->with('success', 'Deleted successfully');
 }
 
