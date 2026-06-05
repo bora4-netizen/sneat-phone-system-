@@ -36,9 +36,18 @@
                         <td>{{ $brand->name }}</td>
                         <td>{{ $brand->products_count }}</td>
                         <td>
-                            <a href="#" class="btn btn-icon btn-outline-secondary edit-model-type" data-bs-toggle="modal" data-bs-target="#editModelType" data-id="{{ $brand->id }}" data-value="{{ $brand->name }}">
-                                <span class="tf-icons bx bx-edit-alt"></span>
-                            </a>
+                            <div class="d-flex gap-2">
+                                <a href="{{ url((request()->lang ?? 'en') . '/brands/' . $brand->id) }}" class="btn btn-icon btn-outline-secondary edit-model-type" data-bs-toggle="modal" data-bs-target="#editModelType" data-id="{{ $brand->id }}" data-value="{{ $brand->name }}">
+                                    <span class="tf-icons bx bx-edit-alt"></span>
+                                </a>
+                                <form action="{{ route('brand.destroy', withLang(['brand' => $brand->id])) }}" method="POST" style="display: inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-icon btn-outline-danger" onsubmit="return confirm('Are you sure?');">
+                                        <span class="tf-icons bx bx-trash"></span>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
@@ -149,7 +158,7 @@
 
                 // Make an AJAX request to check for uniqueness
                 $.ajax({
-                    url: '{{ route('brand.update', withLang()) }}',
+                    url: "{{ route('brand.update', withLang()) }}",
                     method: 'POST',
                     data: { name: name, id: id },
                     headers: {

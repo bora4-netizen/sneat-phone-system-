@@ -7,20 +7,20 @@ use Illuminate\Http\Request;
 
 class NetworkController extends Controller
 {
-    public function index(Request $request,string $lang)
+    public function index(Request $request, string $lang)
     {
-      $networks = Network::withCount([
-        'products',
-        'products as products_status_instock_count' => function ($query) {
-            $query->where('status', 1);
-        },
-        'products as products_status_sold_count' => function ($query) {
-            $query->where('status', 2);
-        },
-        'products as products_status_loan_count' => function ($query) {
-            $query->where('status', 3);
-        },
-      ])->get();
+        $networks = Network::withCount([
+            'products',
+            'products as products_status_instock_count' => function ($query) {
+                $query->where('status', 1);
+            },
+            'products as products_status_sold_count' => function ($query) {
+                $query->where('status', 2);
+            },
+            'products as products_status_loan_count' => function ($query) {
+                $query->where('status', 3);
+            },
+        ])->get();
 
         return view('network.index', ['networks' => $networks]);
     }
@@ -30,8 +30,8 @@ class NetworkController extends Controller
      */
     public function create()
     {
-        //
-        // return view('modelType.create');
+           
+         return view('modelType.create');
     }
 
     /**
@@ -52,16 +52,15 @@ class NetworkController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Network $networks)
-    {
-    }
+    public function show(Network $networks) {}
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Request $network, string $lang, string $id)
     {
-        //
+        $network = Network::findOrFail($id);
+        return view('network.edit', ['network' => $network]);
     }
 
     /**
@@ -88,9 +87,9 @@ class NetworkController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function softdelete(Network $network)
-{
-    $network->delete();
-    return redirect()->route('network.index', withLang())->with('success', 'Deleted successfully');
-}
+    public function destroy(string $lang, Network $network)
+    {
+        $network->delete();
+        return redirect()->route('network.index', withLang())->with('success', 'Deleted successfully');
+    }
 }

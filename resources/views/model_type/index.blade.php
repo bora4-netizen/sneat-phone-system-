@@ -41,9 +41,13 @@
                         <td>{{ $model_type->products_status_loan_count }}</td>
                         <td>{{ $model_type->products_status_instock_count }}</td>
                         <td>
-
                             <div class="d-flex gap-2">
-                                <a href="#" class="btn btn-icon btn-outline-secondary edit-model-type" data-bs-toggle="modal" data-bs-target="#editModelType" data-id="{{ $model_type->id }}" data-value="{{ $model_type->name }}">
+                                <a href="{{ url((request()->lang ?? 'en') . '/model_type/' . $model_type->id) }}"
+                                    class="btn btn-icon btn-outline-secondary edit-model-type"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editModelType"
+                                    data-id="{{ $model_type->id }}"
+                                    data-name="{{ $model_type->name }}">
                                     <span class="tf-icons bx bx-edit-alt"></span>
                                 </a>
                                 <form action="{{ route('model_type.destroy', withLang(['model_type' => $model_type->id])) }}" method="POST">
@@ -81,7 +85,7 @@
                                         <input type="text" id="name" name="name" class="form-control" placeholder="Ex: ZA, ZP, LLA">
                                     </div>
                                 </div>
-                                <div class="row g-2">
+                                <!-- <div class="row g-2">
                                     <div class="col mb-0">
                                         <label for="emailBasic" class="form-label">Email</label>
                                         <input type="text" id="emailBasic" class="form-control" placeholder="xxxx@xxx.xx">
@@ -90,7 +94,7 @@
                                         <label for="dobBasic" class="form-label">DOB</label>
                                         <input type="text" id="dobBasic" class="form-control" placeholder="DD / MM / YY">
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{__('button.close')}}</button>
