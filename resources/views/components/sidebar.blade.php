@@ -156,7 +156,7 @@
         <!-- /Expense Management -->
         <!-- Order Management -->
         @can(['order-list'], ['order-create'])
-        <li class="menu-item{{ (request()->routeIs('sales*')) ? ' active open' : '' }}">
+        <li class="menu-item{{ (request()->routeIs('sales*') && !request()->routeIs('orders*')) ? ' active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bxs-cart-alt"></i>
                 <div data-i18n="{{__('sidebar.shop.product')}}">{{__('sidebar.shop.sales.title')}}</div>
@@ -221,14 +221,16 @@
         @endcan
         <!-- /Loan Management -->
         <!-- POS Management -->
-        @can(['order-create'])
-        <li class="menu-item">
-            <a href="{{ route('sales.create', withLang()) }}" class="menu-link">
-              <i class="menu-icon tf-icons fa-solid fa-cash-register"></i>
-              <div data-i18n="{{__('sidebar.shop.orders.title')}}">{{__('sidebar.shop.orders.title')}}</div>
-          </a>
-        </li>
-        @endcan
+        {{-- ✅ FIX --}}
+@can(['order-create'])
+
+<li class="menu-item{{ (request()->routeIs('orderCustomer*')) ? ' active' : '' }}">
+    <a href="{{ route('orderCustomer.index', withLang()) }}" class="menu-link">
+      <i class="menu-icon tf-icons fa-solid fa-cash-register"></i>
+      <div data-i18n="{{__('sidebar.shop.orders.title')}}">{{__('sidebar.shop.orders.title')}}</div>
+  </a>
+</li>
+@endcan
         <!-- /POS Management -->
         <!-- Report Management -->
         @can(['report-list'])

@@ -35,6 +35,7 @@
     <!-- Helpers -->
     <script src="{{ asset('/assets/vendor/js/helpers.js') }}"></script>
 </head>
+
 <body>
     <div id="app">
         <main class="py-4">
@@ -47,7 +48,8 @@
                             <div class="card-body">
                                 <!-- Logo -->
                                 <div class="app-brand justify-content-center">
-                                    <img src="{{ $company->image_logo ?? 'assets/logo.png'}}" alt="logo" width="100px" />
+                                    {{-- CORRECT --}}
+                                    <img src="{{ $company->image_logo ? asset($company->image_logo) : asset('assets/logo.png') }}" alt="logo" width="100px" />
                                 </div>
                                 <!-- /Logo -->
                                 <h4 class="mb-2 text-center">{{ $company->name ?? 'CMy Phone ShopE' }}</h4>
@@ -116,4 +118,5 @@
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
+
 </html>
