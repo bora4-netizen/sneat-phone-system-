@@ -30,4 +30,19 @@ class OrderCustomerController extends Controller
 
         return view('orderCustomer.index', compact('products', 'brands', 'customers', 'currentDate', 'nextOrderId'));
     }
+    public function search(Request $request)
+    {
+        $query = $request->input('q');
+
+        $products = Product::available()
+            ->with(['series', 'color', 'storage', 'brand'])
+            ->where(function ($q) use ($query) {
+                $q->where('name', 'LIKE', "%{$query}%")
+                    ->orWhereHas('brand', fn($b) => $b->where('name', 'LIKE', "%{$query}%"))
+                    ->orWhere('price', 'LIKE', "%{$query}%");
+            })
+            ->get();
+
+        return response()->json($products);
+    }
 }
