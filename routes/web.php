@@ -77,7 +77,9 @@ Route::group([
         Route::post('/profile/update/password', [UserController::class, 'updatePassword'])->name('update.profile.password');
     });
     Route::group(['prefix'=>'order-customer','as'=>'orderCustomer.'], function(){
-    Route::get('/', [OrderCustomerController::class, 'index'])->name('index');
+      Route::get('/', [OrderCustomerController::class, 'index'])->name('index');
+      Route::get('/search', [OrderCustomerController::class, 'search'])->name('search'); // 👈 add this
+    });
 });
    Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
     Route::get('/', [OrderController::class, 'index'])->name('index');
@@ -210,7 +212,7 @@ Route::group(['prefix'=>'order','as'=>'orders.'], function(){
 
   Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
   Route::resource('orders', OrderController::class);
-});
+
 
 // If this exists elsewhere without the prefix, it conflicts
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index'); 
