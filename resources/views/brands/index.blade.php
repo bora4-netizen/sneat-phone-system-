@@ -36,9 +36,18 @@
                         <td>{{ $brand->name }}</td>
                         <td>{{ $brand->products_count }}</td>
                         <td>
-                            <a href="#" class="btn btn-icon btn-outline-secondary edit-model-type" data-bs-toggle="modal" data-bs-target="#editModelType" data-id="{{ $brand->id }}" data-value="{{ $brand->name }}">
-                                <span class="tf-icons bx bx-edit-alt"></span>
-                            </a>
+                            <div class="d-flex gap-2">
+                                <a href="{{ url((request()->lang ?? 'en') . '/brands/' . $brand->id) }}" class="btn btn-icon btn-outline-secondary edit-model-type" data-bs-toggle="modal" data-bs-target="#editModelType" data-id="{{ $brand->id }}" data-value="{{ $brand->name }}">
+                                    <span class="tf-icons bx bx-edit-alt"></span>
+                                </a>
+                                <form action="{{ route('brand.destroy', withLang(['brand' => $brand->id])) }}" method="POST" style="display: inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-icon btn-outline-danger" onsubmit="return confirm('Are you sure?');">
+                                        <span class="tf-icons bx bx-trash"></span>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
@@ -66,7 +75,7 @@
                                                 <input type="text" id="name" name="name" class="form-control" placeholder="Ex: ZA, ZP, LLA">
                                             </div>
                                         </div>
-                                        <!-- <div class="row g-2">
+                                        <div class="row g-2">
                                             <div class="col mb-0">
                                                 <label for="emailBasic" class="form-label">Email</label>
                                                 <input type="text" id="emailBasic" class="form-control" placeholder="xxxx@xxx.xx">
@@ -75,7 +84,7 @@
                                                 <label for="dobBasic" class="form-label">DOB</label>
                                                 <input type="text" id="dobBasic" class="form-control" placeholder="DD / MM / YY">
                                             </div>
-                                        </div> -->
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{__('button.close')}}</button>
@@ -149,7 +158,7 @@
 
                 // Make an AJAX request to check for uniqueness
                 $.ajax({
-                    url: '{{ route('brand.update', withLang()) }}',
+                    url: "{{ route('brand.update', withLang()) }}",
                     method: 'POST',
                     data: { name: name, id: id },
                     headers: {

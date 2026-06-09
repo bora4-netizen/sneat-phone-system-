@@ -2,20 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes; // ✅ import នៅទីនេះ
 
 class ModelType extends Model
 {
-    use HasFactory;
-
-    protected $table = 'model_types';
+    use SoftDeletes; // ✅ use នៅទីនេះ
 
     protected $fillable = ['name'];
 
     public function products()
     {
-        return $this->hasMany(Product::class, 'model_type_id', 'id');
+        return $this->hasMany(Product::class, 'model_type_id');
     }
-
-}
+}   

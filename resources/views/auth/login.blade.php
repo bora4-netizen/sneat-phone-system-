@@ -1,22 +1,23 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- CSRF Token -->
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <!-- Fonts -->
-        <link rel="dns-prefetch" href="//fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet"
         />
@@ -79,57 +80,40 @@
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                             @enderror
+                                            <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                         </div>
-                                        <div class="mb-3 form-password-toggle">
-                                            <div class="d-flex justify-content-between">
-                                                <label class="form-label" for="password">Password</label>
-                                                @if (Route::has('password.request'))
-                                                    <a class="btn btn-link d-none" href="{{ route('password.request') }}">
-                                                        <small>{{ __('Forgot Your Password?') }}</small>
-                                                    </a>
-                                                @endif
-                                            </div>
-                                            <div class="input-group input-group-merge">
-                                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password">
-
-                                                @error('password')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <button class="btn btn-primary d-grid w-100" type="submit"> {{ __('Login') }}</button>
-                                        </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <button class="btn btn-primary d-grid w-100" type="submit"> {{ __('Login') }}</button>
+                                    </div>
+                                </form>
                             </div>
-                            <!-- /Register -->
                         </div>
+                        <!-- /Register -->
                     </div>
                 </div>
-                <!-- / Content -->
-            </main>
-        </div>
-        <!-- Core JS -->
-        <!-- build:js assets/vendor/js/core.js -->
-        <script src="{{ asset('/assets/vendor/libs/jquery/jquery.js') }} "></script>
-        <script src="{{ asset('/assets/vendor/libs/popper/popper.js') }} "></script>
-        <script src="{{ asset('/assets/vendor/js/bootstrap.js') }} "></script>
-        <script src="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }} "></script>
+            </div>
+            <!-- / Content -->
+        </main>
+    </div>
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="{{ asset('/assets/vendor/libs/jquery/jquery.js') }} "></script>
+    <script src="{{ asset('/assets/vendor/libs/popper/popper.js') }} "></script>
+    <script src="{{ asset('/assets/vendor/js/bootstrap.js') }} "></script>
+    <script src="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }} "></script>
 
-        <script src="{{ asset('/assets/vendor/js/menu.js') }} "></script>
-        <!-- endbuild -->
+    <script src="{{ asset('/assets/vendor/js/menu.js') }} "></script>
+    <!-- endbuild -->
 
-        <!-- Vendors JS -->
+    <!-- Vendors JS -->
 
-        <!-- Main JS -->
-        <script src="{{ asset('/assets/js/main.js') }} "></script>
+    <!-- Main JS -->
+    <script src="{{ asset('/assets/js/main.js') }} "></script>
 
-        <!-- Page JS -->
-        <!-- Place this tag in your head or just before your close body tag. -->
+    <!-- Page JS -->
+    <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-    </body>
+</body>
+
 </html>

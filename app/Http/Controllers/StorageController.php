@@ -86,7 +86,8 @@ class StorageController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Storage $storage)
-    {
-        //
-    }
+{
+    $storage->delete();
+    return redirect()->route('storage.index', withLang())->with('success', 'Deleted successfully');
+}
 }
