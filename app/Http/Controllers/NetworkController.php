@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class NetworkController extends Controller
 {
-    public function index(Request $request, string $lang)
+    public function index(Request $request)
     {
         $networks = Network::withCount([
             'products',
