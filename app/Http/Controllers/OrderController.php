@@ -133,6 +133,9 @@ class OrderController extends Controller
     return response()->json(['message' => 'Submiting Order'], 201);
 }
 
+    /**
+     * Delete the specified order.
+     */
     public function destroy(string $lang, Order $order)
     {
         OrderDetail::where('order_id', $order->id)->delete();
@@ -147,6 +150,9 @@ class OrderController extends Controller
         return view('orders.invoice', compact('order', 'order_detals'));
     }
 
+    /**
+     * Generate PDF invoice for the specified order.
+     */
     public function invoicePdf(Request $request, string $lang, Order $order)
     {
         $currentDate = Carbon::now()->format('Y-m-d');

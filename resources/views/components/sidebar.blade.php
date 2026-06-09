@@ -3,8 +3,8 @@
     <div class="app-brand custom">
         <a href="{{ route('home') }}" class="app-brand-link">
             <span class="app-brand-logo custom">
-                <img src="{{ $company->image_logo }}" alt="logo" width="50px"/>
-            </span>
+                <!-- <img src="{{ $company->image_logo }}" alt="logo" width="50px"/> -->
+<img src="https://i.pinimg.com/564x/90/66/8f/90668f5a13fd6e8e59c779843f38d2fd.jpg" alt="logo" width="50px">            </span>
             <span class="app-brand-text custom menu-text fw-bolder ms-2">{{ $company->name ?? ''}}</span>
         </a>
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
