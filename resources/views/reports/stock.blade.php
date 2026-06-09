@@ -55,9 +55,12 @@
                             <span class="badge bg-label-danger p-2"><i class="fa-solid fa-mobile-button"></i></span>
                         </div>
                     </div>
-                    <span class="fw-semibold d-block mb-1">ប្រាក់ដែលលក់បាន</span>
+                    <!-- <span class="fw-semibold d-block mb-1">ប្រាក់ដែលលក់បាន</span>
                     <h3 class="card-title text-nowrap mb-1">{{ setToStringDolla($totalSoldProductPrice) }}</h3>
-                    <small>ដុល្លា</small>
+                    <small>ដុល្លា</small> -->
+                    <span class="fw-semibold d-block mb-1">{{ __('report.stock.total_revenue') }}</span>
+                    <h3 class="card-title text-nowrap mb-1">{{ setToStringDolla($totalSoldProductPrice) }}</h3>
+                    <small>{{ __('report.stock.dollar') }}</small>
                 </div>
             </div>
         </div>

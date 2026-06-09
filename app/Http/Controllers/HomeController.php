@@ -67,9 +67,8 @@ class HomeController extends Controller
       $orders = Order::limit(5)->orderBy('order_date', 'desc')->get();
       // $loanPayments = 0;
       // $loans = 0;
-      $loanPayments = LoanPayment::with('loan.customer')->latest()->limit(5)->get();
+        $loanPayments = LoanPayment::with('loan.customer')->latest()->limit(5)->get();
         $loans = Loan::latest() ->limit(5)->get();
-
       $lateLoans = Loan::has('customer')->with('customer')->latePayment()->limit(5)->orderBy('next_payment_date', 'desc')->get();
 
       return view('home', [

@@ -35,6 +35,8 @@
           'original' => 'Original',
           'unlock' => 'Sim Lock',
           'locked' => 'Locked By',
+          'total_revenue' => 'Total Revenue',
+          'dollar'        => 'Dollar',
         ],
         'expense' => [
           'title' => 'Expense Report',
