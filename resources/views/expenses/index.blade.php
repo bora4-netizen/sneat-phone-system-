@@ -30,7 +30,7 @@
                           <th>{{__('expense.amount')}}</th>
                           <th>{{__('expense.date')}}</th>
                           @can(['expense-list'],['expense-edit'], ['expense-delete'])
-                          <th>Actions</th>
+                          <th>{{ __('common.lbl_actions') }}</th>
                           @endcan
                       </tr>
                   </thead>
@@ -68,7 +68,7 @@
                         </tr>
                       @endforelse
                   </tbody>
-                  <tfoot class="table-border-bottom-0">
+                  <!-- <tfoot class="table-border-bottom-0">
                       <tr>
                         <th>No</th>
                         <th>{{__('expense.name')}}</th>
@@ -79,7 +79,7 @@
                         <th>Actions</th>
                         @endcan
                       </tr>
-                  </tfoot>
+                  </tfoot> -->
               </table>
               <div class="pagination">
                   {!! $expenses->withQueryString()->appends(request()->except('page'))->links('pagination::bootstrap-5') !!}

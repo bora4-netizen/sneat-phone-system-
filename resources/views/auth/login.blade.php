@@ -47,18 +47,34 @@
                                     <div class="card-body">
                                     <!-- Logo -->
                                         <div class="app-brand justify-content-center">
-                                            <img src="{{ $company->image_logo }}" alt="logo" width="100px"/>
+                                            <img 
+                                                src="{{ $company->image_logo ?? asset('assets/img/logo.png') }}" 
+                                                alt="logo" 
+                                                width="100px"
+                                            />
                                         </div>
                                     <!-- /Logo -->
-                                    <h4 class="mb-2 text-center">{{ $company->name ?? 'CMy Phone ShopE' }}</h4>
-                                    <p class="mb-4 text-center">Please sign-in to your account.</p>
+                                        <h4 class="mb-2 text-center">
+                                            {{ optional($company)->name ?? 'My Phone Shop' }}
+                                        </h4>                                    <p class="mb-4 text-center">Please sign-in to your account.</p>
                                     <form id="formAuthentication" class="mb-3" action="{{ route('login') }}" method="POST">
                                         @csrf
                                         <div class="mb-3">
-                                            <label for="name" class="form-label">Login Name</label>
-                                            <input id="name" type="name" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Enter your login name" required autocomplete="name" autofocus>
-
-                                            @error('name')
+                                            <!-- <label for="name" class="form-label">Login Name</label> -->
+                                             <label for="email" class="form-label">Email</label>
+                                            <!-- <input id="name" type="name" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Enter your login name" required autocomplete="name" autofocus> -->
+                                            <input id="email" type="email"
+                                                    class="form-control @error('email') is-invalid @enderror"
+                                                    name="email"
+                                                    value="{{ old('email') }}"
+                                                    placeholder="Enter your email"
+                                                    required autocomplete="email" autofocus>
+                                            <!-- @error('name')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror -->
+                                            @error('email')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>

@@ -55,7 +55,8 @@
 
 
          <!-- Scripts -->
-        @vite(['resources/sass/app.scss'])
+        <!-- @vite(['resources/sass/app.scss']) -->
+         @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
         <!-- Page CSS -->
 
