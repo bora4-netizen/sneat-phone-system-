@@ -45,11 +45,19 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // public function create(): View
+    // {
+    //     $permission = Permission::get();
+    //     return view('roles.create',compact('permission'));
+    // }
+
     public function create(): View
-    {
-        $permission = Permission::get();
-        return view('roles.create',compact('permission'));
-    }
+{
+    $permission = Permission::get()->groupBy(function ($perm) {
+        return explode('-', $perm->name)[0]; // e.g. "role", "user", "product"
+    });
+    return view('roles.create', compact('permission'));
+}
 
     /**
      * Store a newly created resource in storage.
@@ -86,22 +94,31 @@ class RoleController extends Controller
         return view('roles.show',compact('role','rolePermissions'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($lang, $id): View
-    {
-        $role = Role::findOrfail($id);
-        $permission = Permission::get();
-        $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
-            ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
-            ->all();
+   /**
+ * Show the form for editing the specified resource.
+ *
+ * @param int $id
+ * @return \Illuminate\View\View
+ */
+public function edit($lang, $id): View
+{
+    $role = Role::findOrFail($id);
 
-        return view('roles.edit',compact('role','permission','rolePermissions'));
-    }
+    $permission = Permission::all()->groupBy(function ($item) {
+        return explode('-', $item->name)[0];
+    });
+
+    $rolePermissions = DB::table('role_has_permissions')
+        ->where('role_id', $id)
+        ->pluck('permission_id')
+        ->toArray();
+
+    return view('roles.edit', compact(
+        'role',
+        'permission',
+        'rolePermissions'
+    ));
+}
 
     /**
      * Update the specified resource in storage.
@@ -132,10 +149,13 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id): RedirectResponse
-    {
-        DB::table("roles")->where('id',$id)->delete();
-        return redirect()->route('roles.index', withLang())
-                        ->with('success','Role deleted successfully');
-    }
+public function destroy($lang, $role)
+{
+    $role = \Spatie\Permission\Models\Role::findOrFail($role);
+    
+    $role->delete();
+    
+    return redirect()->route('roles.index', withLang())
+                     ->with('success', 'Role deleted successfully.');
+}
 }

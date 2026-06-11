@@ -34,17 +34,51 @@
                                 <div class="form-group">
                                     <label class="form-label" for="basic-default-fullname">Permission</label>
                                     <br/>
-                                    @foreach($permission as $value)
-                                        <input class="form-check-input @error('permission') is-invalid @enderror" type="checkbox" name="permission[]" id="permission-{{ $value->id }}" value="{{ $value->id }}"
-                                            {{ in_array($value->id, old('permission', $rolePermissions)) ? 'checked' : '' }}>
-                                        <label for="permission-{{ $value->id }}">{{ $value->name }}</label>
-                                        <br/>
-                                    @endforeach
-                                    @error('permission')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                   @foreach($permission as $group => $perms)
+    <div class="mb-3">
+
+        {{-- PARENT checkbox --}}
+        <!-- @php
+            $allChecked = $perms->every(fn($p) => in_array($p->id, $rolePermissions));
+        @endphp -->
+        @php
+    $allChecked = $perms->every(function ($p) use ($rolePermissions) {
+        return in_array($p->id, $rolePermissions);
+    });
+@endphp
+        <div class="form-check fw-bold mb-1">
+            <input class="form-check-input parent-check"
+                   type="checkbox"
+                   id="parent_{{ $group }}"
+                   data-group="{{ $group }}"
+                   {{ $allChecked ? 'checked' : '' }}>
+            <label class="form-check-label text-capitalize fw-semibold"
+                   for="parent_{{ $group }}">
+                {{ ucfirst($group) }}
+            </label>
+        </div>
+
+        {{-- CHILDREN --}}
+        <div class="ms-4">
+            @foreach($perms as $value)
+                <div class="form-check">
+                    <input class="form-check-input child-check"
+                           type="checkbox"
+                           name="permission[]"
+                           id="permission-{{ $value->id }}"
+                           value="{{ $value->id }}"
+                           data-group="{{ $group }}"
+                           {{ in_array($value->id, $rolePermissions) ? 'checked' : '' }}>
+                    <label class="form-check-label"
+                           for="permission-{{ $value->id }}">
+                        {{ $value->name }}
+                    </label>
+                </div>
+            @endforeach
+        </div>
+
+    </div>
+@endforeach
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
