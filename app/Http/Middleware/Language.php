@@ -7,29 +7,24 @@ use Closure;
 
 class Language
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
     public function handle($request, Closure $next)
     {
-        $locale = Cookie::get('locale');
-        $getLocale = $request->route()->lang;
+        $allowedLocales = ['en', 'kh']; // add all your supported locales here
+
+        // Read lang from query string (?lang=en), fall back to cookie, then app default
+        $getLocale   = $request->query('lang');
+        $cookieLocale = Cookie::get('locale');
         $defaultLocale = config('app.fallback_locale');
-        if ($getLocale != null) {
+
+        if ($getLocale && in_array($getLocale, $allowedLocales)) {
             $defaultLocale = $getLocale;
-        } else if($locale != null) {
-            $defaultLocale = $locale;
-        }
-        if ($getLocale == null) {
-            return redirect()->route('dashboard', withLang());
+        } elseif ($cookieLocale && in_array($cookieLocale, $allowedLocales)) {
+            $defaultLocale = $cookieLocale;
         }
 
         Cookie::queue(cookie('locale', $defaultLocale, config('app.cookie.lifetime')));
         app()->setLocale($defaultLocale);
+
         return $next($request);
     }
 }
