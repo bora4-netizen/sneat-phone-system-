@@ -96,72 +96,72 @@
 
     </div>
 
-    
+
     <div class="w-[280px] h-full border-l border-gray-300 flex flex-col text-[13px] text-gray-700">
-    
-    <form action="{{ route('orders.store') }}" method="POST" class="h-full flex flex-col m-0">
-        @csrf
 
-        <div class="p-4 border-b border-gray-100 flex flex-col gap-3">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-medium text-gray-500">
-                    Order: <strong class="text-gray-800 font-bold">#{{ str_pad($nextOrderId, 6, '0', STR_PAD_LEFT) }}</strong>
-                </span>
-                <input type="hidden" name="order_id" value="{{ $nextOrderId }}">
-            </div>
-            
-            <div class="relative w-full">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <svg class="w-4 h-4 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
+        <form action="{{ route('orders.store', withLang()) }}" method="POST">
+            @csrf
+
+            <div class="p-4 border-b border-gray-100 flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-medium text-gray-500">
+                        Order: <strong class="text-gray-800 font-bold">#{{ str_pad($nextOrderId, 6, '0', STR_PAD_LEFT) }}</strong>
+                    </span>
+                    <input type="hidden" name="order_id" value="{{ $nextOrderId }}">
                 </div>
-                
-                <select name="customer_id" class="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-md appearance-none focus:outline-none focus:border-blue-500 font-sans text-[14px]">
-                    @foreach($customers as $id => $name)
+
+                <div class="relative w-full">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        </svg>
+                    </div>
+
+                    <select name="customer_id" class="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-md appearance-none focus:outline-none focus:border-blue-500 font-sans text-[14px]">
+                        @foreach($customers as $id => $name)
                         <option value="{{ $id }}">{{ $name }}</option>
-                    @endforeach
-                </select>
+                        @endforeach
+                    </select>
 
-                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="cart-container" class="flex-grow overflow-y-auto p-4 space-y-3">
-            <div id="empty-cart-msg" class="h-full flex flex-col items-center justify-center text-gray-400 py-12">
-                <p>No items added yet</p>
-            </div>
-        </div>
-
-        <div class="p-4 border-t border-gray-200">
-            <div class="flex justify-between items-center mb-4">
-                <span class="text-gray-500 font-medium text-sm">Total</span>
-                <span class="text-lg font-bold text-gray-900">$ <span id="cart-total-display">0</span></span>
-                <input type="hidden" name="total_amount" id="cart-total-input" value="0">
+            <div id="cart-container" class="flex-grow overflow-y-auto p-4 space-y-3">
+                <div id="empty-cart-msg" class="h-full flex flex-col items-center justify-center text-gray-400 py-12">
+                    <p>No items added yet</p>
+                </div>
             </div>
 
-            <div class="flex gap-2">
-                <button type="submit" name="action" value="print" class="flex flex-col items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-500 font-medium px-4 py-2.5 rounded-lg transition-colors w-[70px]">
-                    <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    <span class="text-[11px]">Bill</span>
-                </button>
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-gray-500 font-medium text-sm">Total</span>
+                    <span class="text-lg font-bold text-gray-900">$ <span id="cart-total-display">0</span></span>
+                    <input type="hidden" name="total_amount" id="cart-total-input" value="0">
+                </div>
 
-                <button type="submit" name="action" value="submit" class="flex-1 flex items-center justify-center gap-2 text-white font-medium py-2.5 rounded-lg transition-colors shadow-sm bg-blue-600 hover:bg-blue-700">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3v-3m-3 3v-3m12 1h-18a2 2 0 01-2-2V5a2 2 0 012-2h18a2 2 0 012 2v12a2 2 0 01-2 2z"></path>
-                    </svg>
-                    <span>Submit Order</span>
-                </button>
+                <div class="flex gap-2">
+                    <button type="submit" name="action" value="print" class="flex flex-col items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-500 font-medium px-4 py-2.5 rounded-lg transition-colors w-[70px]">
+                        <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <span class="text-[11px]">Bill</span>
+                    </button>
+
+                    <button type="submit" name="action" value="submit" class="flex-1 flex items-center justify-center gap-2 text-white font-medium py-2.5 rounded-lg transition-colors shadow-sm bg-blue-600 hover:bg-blue-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3v-3m-3 3v-3m12 1h-18a2 2 0 01-2-2V5a2 2 0 012-2h18a2 2 0 012 2v12a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <span>Submit Order</span>
+                    </button>
+                </div>
             </div>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
 
 </div>
 @endsection

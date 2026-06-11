@@ -44,8 +44,7 @@ class LoginController extends Controller
     public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
-            // 'name' => ['required'],
-            'email' => ['required', 'email'],
+            'name' => ['required'],
             'password' => ['required'],
         ]);
 
@@ -56,8 +55,9 @@ class LoginController extends Controller
         }
 
         return back()->withErrors([
-            // 'name' => 'The provided credentials do not match our records.',
-            'email' => 'The provided credentials do not match our records.',
+            'name' => 'The provided credentials do not match our records.',
         ])->onlyInput('name');
     }
 }
+
+
