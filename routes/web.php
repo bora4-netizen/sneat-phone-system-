@@ -23,20 +23,6 @@ use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\NetworkController;
 use App\Http\Controllers\GurantorController;
-use App\Http\Controllers\DashboardController;
-/*
-
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-
 use App\Http\Controllers\OrderCustomerController;
 
 Auth::routes();
@@ -50,51 +36,61 @@ Route::group([
 
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
-    //Report Route
-    Route::group(['prefix'=>'report','as'=>'reports.'], function(){
-      Route::get('/stock', [ReportController::class, 'stock'])->name('stock');
-      Route::get('/stock/pdf', [ReportController::class, 'stockPdf'])->name('stock.pdf');
-      Route::get('/expense', [ReportController::class, 'expense'])->name('expense');
-      Route::get('/expense/pdf', [ReportController::class, 'expensePdf'])->name('expense.pdf');
-      Route::get('/sale', [ReportController::class, 'sale'])->name('sale');
-      Route::get('/sale/pdf', [ReportController::class, 'salePdf'])->name('sale.pdf');
-      Route::get('/loan', [ReportController::class, 'loan'])->name('loan');
-      Route::get('/loan/pdf', [ReportController::class, 'loanPdf'])->name('loan.pdf');
-      Route::get('/loan/daily-pdf', [ReportController::class, 'loanDailyPdf'])->name('loan.daily-pdf');
-      Route::get('/profit-loss', [ReportController::class, 'profitLoss'])->name('profit-loss');
-      Route::get('/profit-loss/pdf', [ReportController::class, 'profitLossPdf'])->name('profit-loss.pdf');
-      Route::get('/product', [ReportController::class, 'product'])->name('product');
-      Route::get('/product/pdf', [ReportController::class, 'productPdf'])->name('product.pdf');
-      Route::get('/loan/list-loan', [ReportController::class, 'listLoan'])->name('loan.list-loan');
+    // Report Routes
+    Route::group(['prefix' => 'report', 'as' => 'reports.'], function () {
+        Route::get('/stock', [ReportController::class, 'stock'])->name('stock');
+        Route::get('/stock/pdf', [ReportController::class, 'stockPdf'])->name('stock.pdf');
+        Route::get('/expense', [ReportController::class, 'expense'])->name('expense');
+        Route::get('/expense/pdf', [ReportController::class, 'expensePdf'])->name('expense.pdf');
+        Route::get('/sale', [ReportController::class, 'sale'])->name('sale');
+        Route::get('/sale/pdf', [ReportController::class, 'salePdf'])->name('sale.pdf');
+        Route::get('/loan', [ReportController::class, 'loan'])->name('loan');
+        Route::get('/loan/pdf', [ReportController::class, 'loanPdf'])->name('loan.pdf');
+        Route::get('/loan/daily-pdf', [ReportController::class, 'loanDailyPdf'])->name('loan.daily-pdf');
+        Route::get('/profit-loss', [ReportController::class, 'profitLoss'])->name('profit-loss');
+        Route::get('/profit-loss/pdf', [ReportController::class, 'profitLossPdf'])->name('profit-loss.pdf');
+        Route::get('/product', [ReportController::class, 'product'])->name('product');
+        Route::get('/product/pdf', [ReportController::class, 'productPdf'])->name('product.pdf');
+        Route::get('/loan/list-loan', [ReportController::class, 'listLoan'])->name('loan.list-loan');
     });
-    // Product Routes
-Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
-    Route::get('/', [ProductController::class, 'index'])->name('index');
-    Route::get('/create', [ProductController::class, 'create'])->name('create');
-    Route::post('/store', [ProductController::class, 'store'])->name('store');
-    Route::get('/show/{id}', [ProductController::class, 'show'])->name('show');
-    Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('edit');
-    Route::post('/update/{id}', [ProductController::class, 'update'])->name('update');
-    Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('destroy');
-});
 
-Route::resource('roles', RoleController::class);
+    // Roles
+    Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
 
+    // Products
+    Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
+        Route::get('/', [ProductController::class, 'index'])->name('index');
+        Route::get('/create', [ProductController::class, 'create'])->name('create');
+        Route::post('/store', [ProductController::class, 'store'])->name('store');
+        Route::get('/show/{product}', [ProductController::class, 'show'])->name('show');
+        Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('edit');
+        Route::put('/update/{product}', [ProductController::class, 'update'])->name('update');
+        Route::delete('/destroy/{product}', [ProductController::class, 'destroy'])->name('destroy');
+    });
 
-Route::group(['prefix' => 'user', 'as' => 'users.'], function () {
-    Route::get('/', [EmployeeController::class, 'index'])->name('index');
-    Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
-    Route::post('/update/{id}', [EmployeeController::class, 'update'])->name('update');
-    Route::delete('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('destroy');
-    Route::get('/password/edit/{id}', [EmployeeController::class, 'editPassword'])->name('edit.password');
-    Route::post('/password/update/{id}', [EmployeeController::class, 'updatePassword'])->name('update.password');
-    Route::get('/profile', [UserController::class, 'edit'])->name('edit.profile');
-    Route::post('/profile/update', [UserController::class, 'update'])->name('update.profile');
-    Route::get('/profile/edit/password', [UserController::class, 'editPassword'])->name('edit.profile.password');
-    Route::post('/profile/update/password', [UserController::class, 'updatePassword'])->name('update.profile.password');
-});
-      Route::group(['prefix'=>'order','as'=>'orders.'], function(){
-      Route::get('/', [OrderController::class, 'index'])->name('index');
+    // Users / Employees
+    Route::group(['prefix' => 'user', 'as' => 'users.'], function () {
+        Route::get('/', [EmployeeController::class, 'index'])->name('index');
+        Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [EmployeeController::class, 'update'])->name('update');
+        Route::delete('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('destroy');
+        Route::get('/password/edit/{id}', [EmployeeController::class, 'editPassword'])->name('edit.password');
+        Route::post('/password/update/{id}', [EmployeeController::class, 'updatePassword'])->name('update.password');
+        Route::get('/profile', [UserController::class, 'edit'])->name('edit.profile');
+        Route::post('/profile/update', [UserController::class, 'update'])->name('update.profile');
+        Route::get('/profile/edit/password', [UserController::class, 'editPassword'])->name('edit.profile.password');
+        Route::post('/profile/update/password', [UserController::class, 'updatePassword'])->name('update.profile.password');
+    });
+
+    // Orders
+    Route::group(['prefix' => 'order', 'as' => 'orders.'], function () {
+        Route::get('/', [OrderController::class, 'index'])->name('index');
+        Route::get('/create', [OrderController::class, 'create'])->name('create');
+        Route::post('/store', [OrderController::class, 'store'])->name('store');
+        Route::get('/check/product', [OrderController::class, 'checkProductOrder'])->name('check.product');
+        Route::get('/{order}', [OrderController::class, 'show'])->name('show');
+        Route::get('/{order}/invoice', [OrderController::class, 'invoice'])->name('invoice');
+        Route::delete('/{order}', [OrderController::class, 'destroy'])->name('destroy');
     });
 
     // Sales
@@ -218,48 +214,6 @@ Route::group(['prefix' => 'user', 'as' => 'users.'], function () {
             Route::get('/late', [LoanPaymentController::class, 'late'])->name('late');
         });
     });
-    Route::group(['prefix'=>'loan','as'=>'loans.'], function(){
-      Route::get('/', [LoanController::class, 'index'])->name('index');
-      Route::get('/create', [LoanController::class, 'create'])->name('create');
-      Route::post('/', [LoanController::class, 'store'])->name('store');
-      Route::get('/{loan}/edit', [LoanController::class, 'edit'])->name('edit');
-      Route::put('/{loan}', [LoanController::class, 'update'])->name('update');
-      Route::delete('/{loan}', [LoanController::class, 'destroy'])->name('destroy');
-      Route::get('{loan}/invoice/', [LoanController::class, 'invoice'])->name('invoice');
-      Route::get('{loan}/invoice/pdf', [LoanController::class, 'invoicePdf'])->name('invoice.pdf');
-      Route::get('{loan}/agreement/', [LoanController::class, 'agreement'])->name('agreement');
-      Route::group(['prefix'=>'payment','as'=>'payments.'], function(){
-        Route::get('/', [LoanPaymentController::class, 'index'])->name('index');
-        Route::get('/create', [LoanPaymentController::class, 'create'])->name('create');
-        Route::post('/', [LoanPaymentController::class, 'store'])->name('store');
-        Route::get('/{loanPayment}/edit', [LoanPaymentController::class, 'edit'])->name('edit');
-        Route::get('/{loanPayment}/invoice', [LoanPaymentController::class, 'invoice'])->name('invoice');
-        Route::get('/{loanPayment}/invoice/pdf', [LoanPaymentController::class, 'invoicePdf'])->name('invoice.pdf');
-        Route::put('/{loanPayment}', [LoanPaymentController::class, 'update'])->name('update');
-        Route::delete('/{loanPayment}', [LoanPaymentController::class, 'destroy'])->name('destroy');
-        Route::get('{loan}/list', [LoanController::class, 'list'])->name('list');
-        Route::get('/{loan}/pdf', [LoanController::class,'pdf'])->name('pdf');
-        Route::get('/late', [LoanPaymentController::class, 'late'])->name('late');
-      });
-    });
-    Route::group(['prefix'=>'customer','as'=>'customers.'], function(){
-      Route::get('/', [CustomerController::class, 'index'])->name('index');
-      Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('edit');
-      Route::get('/create', [CustomerController::class, 'create'])->name('create');
-      Route::get('/show/{id}', [CustomerController::class, 'show'])->name('show');
-      Route::post('/store', [CustomerController::class, 'store'])->name('store');
-      Route::post('/update/{id}', [CustomerController::class, 'update'])->name('update');
-      Route::delete('/destroy/{id}', [CustomerController::class, 'destroy'])->name('destroy');
-      Route::get('/password/edit/{id}', [CustomerController::class, 'editPassword'])->name('edit.password');
-      Route::post('/password/update/{id}', [CustomerController::class, 'updatePassword'])->name('update.password');
-      Route::get('/profile', [CustomerController::class, 'edit'])->name('edit.profile');
-      Route::post('/profile/update', [CustomerController::class, 'update'])->name('update.profile');
-      Route::get('/profile/edit/password', [CustomerController::class, 'editPassword'])->name('edit.profile.password');
-      Route::post('/profile/update/password', [CustomerController::class, 'updatePassword'])->name('update.profile.password');
-      Route::group(['prefix'=>'gurantor', 'as'=>'gurantors.'], function(){
-        Route::get('/', [CustomerController::class, 'index'])->name('index');
-      });
-  });
 
     // Customers
     Route::group(['prefix' => 'customer', 'as' => 'customers.'], function () {

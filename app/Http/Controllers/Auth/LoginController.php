@@ -44,7 +44,7 @@ class LoginController extends Controller
     public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
-            'name' => ['required'],       
+            'name' => ['required'],
             'password' => ['required'],
         ]);
 
