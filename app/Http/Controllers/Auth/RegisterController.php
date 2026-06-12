@@ -67,10 +67,11 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:20', new LowercaseWithUnderscore, 'unique:users'],
-            'email' => ['nullable', 'email', 'max:255', 'unique:users'],
+            'name'     => ['required', 'string', 'max:20', new LowercaseWithUnderscore, 'unique:users'],
+            'email'    => ['nullable', 'email', 'max:255', 'unique:users'],
             'position' => ['required'],
-            'password' => ['required', 'string', 'min:8', 'confirmed']
+            'phone'    => ['nullable', 'string', 'max:20'],  // ✅ បន្ថែម
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
 
@@ -84,26 +85,26 @@ class RegisterController extends Controller
     {
         $userInfo = Auth::user();
         $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'] ?? $data['name'].'@example.com',
+            'name'     => $data['name'],
+            'email'    => $data['email'] ?? $data['name'] . '@example.com',
             'password' => Hash::make($data['password']),
         ]);
 
         // Creates the user profile
         $employee = Employee::create([
-          'user_id' => $user->id,
-          'name' => '',
-          'latin_name' => '',
-          'phone' => '',
-          'position_id' => $data['position'] ?? 1
+            'user_id'     => $user->id,
+            'name'        => $data['name'],
+            'latin_name'  => $data['latin_name'] ?? '',
+            'phone'       => $data['phone'] ?? '',  // ✅ save phone
+            'position_id' => $data['position'] ?? 1,
         ]);
+
         $user->employee()->save($employee);
         $user->assignRole($data['position']);
 
-        // This, of course, assumes you have
-        // the above relationship defined in your user model.
         return $user;
     }
+
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();

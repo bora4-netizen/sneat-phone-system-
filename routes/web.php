@@ -24,6 +24,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\NetworkController;
 use App\Http\Controllers\GurantorController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,9 +41,9 @@ use App\Http\Controllers\GurantorController;
 Auth::routes();
 Route::get('/', HomeController::class)->name('home');
 Route::group([
-  'prefix' => '{lang}',
-  'where' => ['lang' => 'kh|en'],
-  'middleware' => [ 'auth' , 'language' ]], function () {
+   'prefix' => '{lang}',
+   'where' => ['lang' => 'kh|en'],
+   'middleware' => [ 'auth' , 'language' ]], function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
     //Report Route
@@ -62,45 +63,63 @@ Route::group([
       Route::get('/product/pdf', [ReportController::class, 'productPdf'])->name('product.pdf');
       Route::get('/loan/list-loan', [ReportController::class, 'listLoan'])->name('loan.list-loan');
     });
+
+     // punloeu position//
+
     Route::resource('roles', RoleController::class);
     Route::resource('products', ProductController::class);
-    Route::group(['prefix'=>'user','as'=>'users.'], function(){
-        Route::get('/', [EmployeeController::class, 'index'])->name('index');
-        Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
-        Route::post('/update/{id}', [EmployeeController::class, 'update'])->name('update');
-        Route::delete('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('destroy');
-        Route::get('/password/edit/{id}', [EmployeeController::class, 'editPassword'])->name('edit.password');
-        Route::post('/password/update/{id}', [EmployeeController::class, 'updatePassword'])->name('update.password');
-        Route::get('/profile', [UserController::class, 'edit'])->name('edit.profile');
-        Route::post('/profile/update', [UserController::class, 'update'])->name('update.profile');
-        Route::get('/profile/edit/password', [UserController::class, 'editPassword'])->name('edit.profile.password');
-        Route::post('/profile/update/password', [UserController::class, 'updatePassword'])->name('update.profile.password');
-    });
+    Route::group(['prefix' => 'user', 'as' => 'users.'], function () {
+    Route::get('/', [EmployeeController::class, 'index'])->name('index');
+    Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
+    Route::post('/update/{id}', [EmployeeController::class, 'update'])->name('update');
+    Route::get('/password/edit/{id}', [EmployeeController::class, 'editPassword'])->name('edit.password');
+    Route::post('/update/password/{id}', [EmployeeController::class, 'updatePassword'])->name('update.password');
+    Route::delete('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('destroy');
+    // Profile routes
+    Route::get('/profile', [UserController::class, 'edit'])->name('edit.profile');
+    Route::put('/profile/update', [UserController::class, 'update'])->name('update.profile');        
+    Route::get('/profile/edit/password', [UserController::class, 'editPassword'])->name('edit.profile.password');
+   Route::put('/profile/update/password', [UserController::class, 'updatePassword'])->name('update.profile.password');
+});
+
+//     Route::group(['prefix' => 'user', 'as' => 'users.'], function () {
+//       Route::get('/', [EmployeeController::class, 'index'])->name('index');
+//       Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
+//       Route::post('/update/{id}', [EmployeeController::class, 'update'])->name('update');
+//       Route::get('/password/edit/{id}', [EmployeeController::class, 'editPassword'])->name('edit.password');
+//       Route::post('/update/password/{id}', [EmployeeController::class, 'updatePassword'])->name('update.password');
+//       Route::delete('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('destroy');
+//       Route::delete('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('destroy');
+//       // ✅ បន្ថែម profile routes
+//       Route::get('/profile', [UserController::class, 'edit'])->name('edit.profile');
+//       Route::get('/profile/edit/password', [UserController::class, 'editPassword'])->name('edit.profile.password');
+//       Route::put('/profile/update/password', [UserController::class, 'updatePassword'])->name('update.profile.password');
+// });
     Route::group(['prefix'=>'order','as'=>'orders.'], function(){
       Route::get('/', [OrderController::class, 'index'])->name('index');
     });
     Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
       Route::get('/', [OrderController::class, 'index'])->name('index');
-     
     });
     Route::group(['prefix'=>'cart','as'=>'carts.'], function(){
       Route::post('/store', [CartController::class, 'store'])->name('store');
       Route::delete('/destroy', [CartController::class, 'destroy'])->name('destroy');
     });
 
-    Route::group(['prefix'=>'expense','as'=>'expenses.'], function(){
+      Route::group(['prefix'=>'expense','as'=>'expenses.'], function(){
       Route::get('/', [ExpenseController::class, 'index'])->name('index');
       Route::get('/create', [ExpenseController::class, 'create'])->name('create');
       Route::post('/store', [ExpenseController::class, 'store'])->name('store');
       Route::get('{expense}/edit', [ExpenseController::class, 'edit'])->name('edit');
       Route::patch('/{expense}', [ExpenseController::class, 'update'])->name('update');
       Route::delete('/{expense}', [ExpenseController::class, 'destroy'])->name('destroy');
-      Route::group(['prefix'=>'category','as'=>'categories.'], function(){
-        Route::get('/', [ExpenseCategoryController::class, 'index'])->name('index');
-        Route::get('/create', [ExpenseCategoryController::class, 'create'])->name('create');
-        Route::post('/store', [ExpenseCategoryController::class, 'store'])->name('store');
-        Route::get('/edit/{sale}', [ExpenseCategoryController::class, 'edit'])->name('edit');
-        Route::post('/update/{sale}', [ExpenseCategoryController::class, 'update'])->name('update');
+
+       Route::group(['prefix'=>'category','as'=>'categories.'], function(){
+       Route::get('/', [ExpenseCategoryController::class, 'index'])->name('index');
+       Route::get('/create', [ExpenseCategoryController::class, 'create'])->name('create');
+       Route::post('/store', [ExpenseCategoryController::class, 'store'])->name('store');
+       Route::get('/edit/{sale}', [ExpenseCategoryController::class, 'edit'])->name('edit');
+       Route::post('/update/{sale}', [ExpenseCategoryController::class, 'update'])->name('update');
       });
     });
 

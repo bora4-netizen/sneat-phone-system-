@@ -116,23 +116,14 @@ class EmployeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, string $lang, $id)
-    {
-        $request->validate([
-            'confirm' => 'required',
-        ]);
-        // Find the User by ID
-        // $user = User::findOrFail($id);
+public function destroy(Request $request, $lang, $id)
+{
+    User::destroy($id);
+    return redirect()->route('users.index', withLang())
+        ->with('success', 'Deleted successfully');
+}
 
-        // Delete the associated Employee
-        // $user->employee()->destroy($id);
-
-        // Optionally, you can also delete the User itself
-        User::destroy($id);
-        return redirect()->route('users.index', withLang())->with('success', 'Branch soft deleted successfully');
-    }
-
-    public function editPassword($id)
+    public function editPassword($lang, $id)
     {
         $user = User::with('employee')->findOrfail($id);
         return view('employees.edit-password', [
@@ -140,7 +131,7 @@ class EmployeeController extends Controller
         ]);
     }
 
-    public function updatePassword(Request $request, $id)
+    public function updatePassword(Request $request, $lang, $id)
     {
         $request->validate([
             'new_password' => 'required|confirmed',

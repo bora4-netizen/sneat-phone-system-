@@ -32,13 +32,13 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-start align-items-sm-center gap-4">
                                 <img
-                                    src="{{ $user->getProfile() }}"
-                                    alt="user-avatar"
-                                    class="d-block rounded"
-                                    height="100"
-                                    width="100"
-                                    id="uploadedAvatar"
-                                    onError="this.onerror=null;this.src='{{ asset('/assets/img/blank-profile.png') }}';"
+    src="{{ $user->getProfile() }}"
+    alt="user-avatar"
+    class="d-block rounded"
+    height="100"
+    width="100"
+    id="uploadedAvatar"
+    onError="this.onerror=null;this.src='{{ asset('/assets/img/blank-profile.png') }}';"
                                 />
                                 <input type="hidden" value="{{ $user->getProfile() }}" class="mediaUserdata" />
                                 <div class="button-wrapper">

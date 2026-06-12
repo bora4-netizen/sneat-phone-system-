@@ -23,7 +23,12 @@
                         @endcan
                     @endcan
                 </ul>
-                <form id="formAccountSettings" method="POST" action="{{ route('users.update.profile', withLang()) }}" enctype="multipart/form-data">
+                
+             {{-- ✅ ត្រឹមត្រូវ --}}
+<form action="{{ route('users.update.profile.password', withLang()) }}" method="POST">
+    @csrf
+    @method('PUT')
+   
                     @csrf
                     <div class="card mb-4">
                         <h5 class="card-header">Profile Details <small>( Login Name: {{ $user->name }} )</small></h5>

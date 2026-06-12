@@ -78,30 +78,53 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="mb-3 form-password-toggle">
-                            <label class="form-label" for="password">{{ __('Password') }}</label>
+
+                        {{-- ✅ Phone Number Field --}}
+                        <div class="mb-3">
+                            <label class="form-label" for="phone">Phone Number</label>
                             <div class="input-group input-group-merge">
-                                <span id="password2" class="input-group-text">
+                                <span class="input-group-text">
+                                    <i class="bx bx-phone"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    id="phone"
+                                    name="phone"
+                                    value="{{ old('phone') }}"
+                                    class="form-control @error('phone') is-invalid @enderror"
+                                    placeholder="012 345 678"
+                                />
+                                @error('phone')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="mb-3 form-password-toggle">
+                            <label class="form-label" for="password">New Password</label>
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text">
                                     <i class="bx bx-key"></i>
                                 </span>
                                 <input
                                     type="password"
                                     id="password"
-                                    class="form-control @error('password') is-invalid @enderror"
-                                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                    aria-label="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                    aria-describedby="password2"
                                     name="password"
+                                    class="form-control @error('password') is-invalid @enderror"
+                                    placeholder="••••••••"
                                     required
                                     autocomplete="new-password"
-                                />
-                                <input id="new-password" type="password" class="form-control @error('new_password') is-invalid @enderror" name="new_password" required autocomplete="new-password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="new-password">
+                                >
+                                <span class="input-group-text cursor-pointer">
+                                    <i class="bx bx-hide"></i>
+                                </span>
                                 @error('password')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                             </div>
                         </div>
                         <div class="mb-3 form-password-toggle">
@@ -113,9 +136,9 @@
                                 <input
                                     type="password"
                                     id="password-confirm"
-                                    class="form-control form-control"
-                                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                    aria-label="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                    class="form-control"
+                                    placeholder="••••••••••••"
+                                    aria-label="••••••••••••"
                                     aria-describedby="password-confirm2"
                                     name="password_confirmation"
                                     required

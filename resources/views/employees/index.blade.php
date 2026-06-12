@@ -54,11 +54,29 @@
                             <td>{{ $user->employee->position ?? ''}}</td>
                             <td>{!! $user->employee->statusname ?? ''!!}</td>
                             @can('user-edit')
-                            <td>
-                                    <a href="{{ route('users.edit', withLang(['id' => $user->id])) }}" class="btn btn-icon btn-outline-secondary">
-                                        <span class="tf-icons bx bx-edit-alt"></span>
-                                    </a>
-                            </td>
+                           <td>
+    <!-- Edit Button -->
+    <div class="d-flex align-items-center gap-1">
+    
+    {{-- Edit Button --}}
+    <a href="{{ route('users.edit', withLang(['id' => $user->id])) }}"
+       class="btn btn-icon btn-outline-secondary">
+        <span class="tf-icons bx bx-edit-alt"></span>
+    </a>
+
+    {{-- Delete Button --}}
+    <form action="{{ route('users.destroy', withLang(['id' => $user->id])) }}" 
+          method="POST" 
+          onsubmit="return confirm('Are you sure to delete this ?')">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-icon btn-outline-danger">
+            <span class="tf-icons bx bx-trash"></span>
+        </button>
+    </form>
+
+</div>
+</td>
                             @endcan
                         </tr>
                     @endforeach
