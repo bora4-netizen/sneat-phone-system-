@@ -10,6 +10,9 @@ use Spatie\Permission\Models\Permission;
 
 class CreateAdminUserSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
         // $user = User::create([
@@ -21,35 +24,42 @@ class CreateAdminUserSeeder extends Seeder
             ['email' => 'admin@email.com'],
             [
                 'name' => 'administrator',
-                'password' => bcrypt('abcd123456'),
+                'password' => bcrypt('abcd123456')
             ]
         );
 
-        // 2. Create or get role
+
+        // $role = Role::create(['name' => 'Administrator']);
         $role = Role::firstOrCreate([
-            'name' => 'Administrator',
-            
+            'name' => 'Administrator'
         ]);
 
-        // 3. Sync all permissions to role (if exists)
-        $permissions = Permission::pluck('name')->toArray();
+        $permissions = Permission::pluck('id','id')->all();
+
         $role->syncPermissions($permissions);
 
-        // 4. Assign role to user (IMPORTANT)
-        $user->assignRole($role);
+        $user->assignRole([$role->id]);
 
-        // 5. Create employee profile (avoid duplicate)
-        $employee = Employee::updateOrCreate(
+        //  Creates the user profile
+        //  $employee = Employee::create([
+        //   'user_id' => $user->id,
+        //   'name' => '',
+        //   'latin_name' => '',
+        //   'phone' => '',
+        //   'position_id' => $role->id
+        // ]);
+        Employee::updateOrCreate(
             ['user_id' => $user->id],
             [
                 'name' => '',
                 'latin_name' => '',
                 'phone' => '',
-                'position_id' => null,
+                'position_id' => $role->id
             ]
         );
 
-        // 6. Link relationship (only if needed)
+
+
         // $user->employee()->save($employee);
     }
 }
