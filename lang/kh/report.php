@@ -31,9 +31,12 @@
           'total_price' => 'តម្លៃសរុប',
           'sold' => 'លក់ហើយ',
           'instock' => 'មានក្នុងស្តុក',
-          'original' => 'Original',
+          'original' => 'ដើម',       
+          'unlock' => 'ស៊ីមឡុក',    // <-- add this
           'broken' => 'ខូច',
           'locked' => 'ឡុក',
+          'total_revenue' => 'ប្រាក់ដែលលក់បាន',
+          'dollar'        => 'ដុល្លា',
         ],
         'expense' => [
           'title' => 'របាយការណ៍ចំណាយ',

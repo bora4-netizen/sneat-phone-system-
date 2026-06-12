@@ -59,3 +59,5 @@ class LoginController extends Controller
         ])->onlyInput('name');
     }
 }
+
+

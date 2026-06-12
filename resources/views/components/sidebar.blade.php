@@ -3,8 +3,8 @@
     <div class="app-brand custom">
         <a href="{{ route('home') }}" class="app-brand-link">
             <span class="app-brand-logo custom">
-            
-            </span>
+                <!-- <img src="{{ $company->image_logo }}" alt="logo" width="50px"/> -->
+<img src="https://i.pinimg.com/564x/90/66/8f/90668f5a13fd6e8e59c779843f38d2fd.jpg" alt="logo" width="50px">            </span>
             <span class="app-brand-text custom menu-text fw-bolder ms-2">{{ $company->name ?? ''}}</span>
         </a>
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -156,7 +156,7 @@
         <!-- /Expense Management -->
         <!-- Order Management -->
         @can(['order-list'], ['order-create'])
-        <li class="menu-item{{ (request()->routeIs('sales*')) ? ' active open' : '' }}">
+        <li class="menu-item{{ (request()->routeIs('sales*') && !request()->routeIs('orders*')) ? ' active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bxs-cart-alt"></i>
                 <div data-i18n="{{__('sidebar.shop.product')}}">{{__('sidebar.shop.sales.title')}}</div>
@@ -221,14 +221,16 @@
         @endcan
         <!-- /Loan Management -->
         <!-- POS Management -->
-        @can(['order-create'])
-        <li class="menu-item">
-          <a href="{{ route('orders.create', withLang()) }}" class="menu-link">
-              <i class="menu-icon tf-icons fa-solid fa-cash-register"></i>
-              <div data-i18n="{{__('sidebar.shop.orders.title')}}">{{__('sidebar.shop.orders.title')}}</div>
-          </a>
-        </li>
-        @endcan
+        {{-- ✅ FIX --}}
+@can(['order-create'])
+
+<li class="menu-item{{ (request()->routeIs('orderCustomer*')) ? ' active' : '' }}">
+    <a href="{{ route('orderCustomer.index', withLang()) }}" class="menu-link">
+      <i class="menu-icon tf-icons fa-solid fa-cash-register"></i>
+      <div data-i18n="{{__('sidebar.shop.orders.title')}}">{{__('sidebar.shop.orders.title')}}</div>
+  </a>
+</li>
+@endcan
         <!-- /POS Management -->
         <!-- Report Management -->
         @can(['report-list'])

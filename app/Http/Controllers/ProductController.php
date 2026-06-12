@@ -72,9 +72,12 @@ class ProductController extends Controller
       }
 
       $url = $request->fullUrlWithQuery(['view' => $viewUrl]);
-      $products = $query->orderBy('status', 'asc')->orderBy('purchase_date', 'desc')->paginate(20);
-      $totalProductAvailable = $query->where('status', 1)->count();
-      $totalProductSold = Product::where('status', 2)->count();
+      // $products = $query->orderBy('status', 'asc')->orderBy('purchase_date', 'desc')->paginate(20);
+      // $totalProductAvailable = $query->where('status', 1)->count();
+      // $totalProductSold = Product::where('status', 2)->count();
+      $totalProductAvailable = Product::where('status', 1)->count();
+$totalProductSold = Product::where('status', 2)->count();
+$products = Product::paginate(20);
 
       return view('products.index', compact('products', 'view', 'brands', 'series', 'colors', 'modelTypes', 'storage', 'conditions', 'type_of_machines', 'status', 'parameterNames', 'url', 'totalProductAvailable', 'totalProductSold'));
     }
@@ -85,6 +88,22 @@ class ProductController extends Controller
      */
     public function create()
     {
+        $brands = Brand::pluck('name', 'id');
+        $series = Series::pluck('name', 'id');
+        $colors = Color::pluck('name', 'id');
+        $modelTypes = ModelType::pluck('name', 'id');
+        $storage = Storage::pluck('name', 'id');
+        $networks = Network::pluck('name', 'id');
+
+        return view('products.create', compact(
+            'brands',
+            'series',
+            'colors',
+            'modelTypes',
+            'storage',
+            'networks'
+        ));
+
       
     }
 
@@ -126,7 +145,9 @@ class ProductController extends Controller
         $product->save();
       }
        // Optionally, you can return a response to indicate success or redirect to a different page.
-      return redirect()->route('products.show', withLang(['product' => $product->id]));
+      // return redirect()->route('products.show', withLang(['product' => $product->id]));
+      return redirect()->route('products.index', withLang())
+    ->with('success', 'Product saved successfully!');
     }
 
     /**
@@ -143,6 +164,23 @@ class ProductController extends Controller
      */
     public function edit(string $lang, Product $product)
     {
+        $brands = Brand::pluck('name', 'id');
+        $series = Series::pluck('name', 'id');
+        $colors = Color::pluck('name', 'id');
+        $modelTypes = ModelType::pluck('name', 'id');
+        $storage = Storage::pluck('name', 'id');
+        $networks = Network::pluck('name', 'id');
+
+        return view('products.edit', compact(
+            'product',
+            'brands',
+            'series',
+            'colors',
+            'modelTypes',
+            'storage',
+            'networks'
+        ));
+
       
     }
 
@@ -151,6 +189,39 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, string $lang, Product $product)
     {
+        $product->product_code = $request->product_code ?? '';
+        $product->product_name = $request->product_name;
+        $product->product_imei = $request->product_imei;
+        $product->brand_id = $request->brand;
+        $product->series_id = $request->series;
+        $product->color_id = $request->color;
+        $product->model_type_id = $request->model_type;
+        $product->condition = $request->condition;
+        $product->storage_id = $request->storage;
+        $product->type_of_machine = $request->type_of_machine;
+        $product->network_id = $request->network;
+        $product->battery_percentage = $request->battery_percentage;
+        $product->percentage = $request->percentage;
+        $product->purchase_price = $request->purchase_price;
+        $product->selling_price = $request->selling_price;
+        $product->purchase_date = $request->purchase_date;
+        $product->status = $request->status;
+        $product->note = $request->note ?? '';
+
+        // update image if exists
+        if ($image = $request->file('image')) {
+            $destinationPath = 'images/product/';
+            $filename = time() . '_' . $image->getClientOriginalName();
+            $image->move($destinationPath, $filename);
+
+            $product->image = $filename;
+        }
+
+        $product->save();
+
+        return redirect()->route('products.index', withLang())
+            ->with('success', 'Product updated successfully');
+
       
     }
 

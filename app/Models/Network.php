@@ -1,20 +1,14 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany; // Or BelongsToMany depending on your DB design
 
 class Network extends Model
 {
-    use HasFactory;
-
-    protected $table = 'networks';
-
-    protected $fillable = ['name'];
-
-    public function products()
+    // Define the products relationship
+    public function products(): HasMany
     {
-        return $this->hasMany(Product::class, 'network_id', 'id');
+        return $this->hasMany(Product::class);
     }
 }

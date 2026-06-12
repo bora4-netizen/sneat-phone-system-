@@ -41,9 +41,18 @@
                         <td>{{ $serial->products_status_loan_count }}</td>
                         <td>{{ $serial->products_status_instock_count }}</td>
                         <td>
-                            <a href="#" class="btn btn-icon btn-outline-secondary edit-series" data-bs-toggle="modal" data-bs-target="#editSeries" data-id="{{ $serial->id }}" data-value="{{ $serial->name }}">
+                            <div class="">
+                            <a href="{{ route('serial.index', withLang()) }}" class="btn btn-icon btn-outline-secondary edit-series" data-bs-toggle="modal" data-bs-target="#editSeries" data-id="{{ $serial->id }}" data-value="{{ $serial->name }}">
                                 <span class="tf-icons bx bx-edit-alt"></span>
                             </a>
+                            <form action="{{ route('serial.destroy', withLang(['serial' => $serial->id])) }}" method="POST" style="display: inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-icon btn-outline-danger" onsubmit="return confirm('Are you sure?');">
+                                        <span class="tf-icons bx bx-trash"></span>
+                                    </button>
+                            </form>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
@@ -88,7 +97,7 @@
                                         </div>
 
 
-                                        <!-- <div class="row g-2">
+                                        <div class="row g-2">
                                             <div class="col mb-0">
                                                 <label for="emailBasic" class="form-label">Email</label>
                                                 <input type="text" id="emailBasic" class="form-control" placeholder="xxxx@xxx.xx">
@@ -97,7 +106,7 @@
                                                 <label for="dobBasic" class="form-label">DOB</label>
                                                 <input type="text" id="dobBasic" class="form-control" placeholder="DD / MM / YY">
                                             </div>
-                                        </div> -->
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{__('button.close')}}</button>
@@ -171,7 +180,7 @@
 
                 // Make an AJAX request to check for uniqueness
                 $.ajax({
-                    url: '{{ route('serial.update', withLang()) }}',
+                    url: "{{ route('serial.update', withLang()) }}",
                     method: 'POST',
                     data: { name: name, id: id },
                     headers: {

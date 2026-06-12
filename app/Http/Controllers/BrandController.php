@@ -10,7 +10,7 @@ class BrandController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, string $lang)
+    public function index(Request $request)
     {
         //
         $brands = Brand::withCount([
@@ -91,8 +91,10 @@ class BrandController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Brand $brand)
-    {
-        //
-    }
+    public function destroy(string $lang, Brand $brand)
+{
+    $brand->delete(); 
+    return redirect()->route('brand.index', withLang())->with('success', 'Deleted successfully');
+}
+
 }

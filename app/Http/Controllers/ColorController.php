@@ -10,20 +10,20 @@ class ColorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, string $lang)
+    public function index(Request $request)
     {
         //
         $colors = Color::withCount([
-          'products',
-          'products as products_status_instock_count' => function ($query) {
-              $query->where('status', 1);
-          },
-          'products as products_status_sold_count' => function ($query) {
-              $query->where('status', 2);
-          },
-          'products as products_status_loan_count' => function ($query) {
-              $query->where('status', 3);
-          },
+            'products',
+            'products as products_status_instock_count' => function ($query) {
+                $query->where('status', 1);
+            },
+            'products as products_status_sold_count' => function ($query) {
+                $query->where('status', 2);
+            },
+            'products as products_status_loan_count' => function ($query) {
+                $query->where('status', 3);
+            },
         ])->get();
         return view('colors.index', ['colors' => $colors]);
     }
@@ -33,7 +33,7 @@ class ColorController extends Controller
      */
     public function create()
     {
-        //
+        return view('colors.create');
     }
 
     /**
@@ -56,7 +56,7 @@ class ColorController extends Controller
      */
     public function show(Color $color)
     {
-        //
+        
     }
 
     /**
@@ -64,7 +64,8 @@ class ColorController extends Controller
      */
     public function edit(Color $color)
     {
-        //
+        return view('colors.edit', compact('color'));
+
     }
 
     /**
@@ -77,9 +78,9 @@ class ColorController extends Controller
             'required' => 'This field can not be blanked',
             'unique' => 'This color is exists'
         ];
-        $validatedData = $request->validate(([
+        $validatedData = $request->validate([
             'name' => 'required|unique:colors'
-        ]), $messages);
+        ], $messages);
         // dd($messages);
         $color = Color::findorfail($request->id);
         $color->name = $request->name;
@@ -91,8 +92,9 @@ class ColorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Color $color)
+    public function destroy(string $lang, Color $color)
     {
-        //
+        $color->delete();
+        return redirect()->route('color.index', withLang())->with('success', 'Deleted successfully');
     }
 }

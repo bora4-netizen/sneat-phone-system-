@@ -37,13 +37,17 @@ use App\Http\Controllers\DashboardController;
 */
 
 
+use App\Http\Controllers\OrderCustomerController;
 
 Auth::routes();
 Route::get('/', HomeController::class)->name('home');
+
 Route::group([
-  'prefix' => '{lang}',
-  'where' => ['lang' => 'kh|en'],
-  'middleware' => [ 'auth' , 'language' ]], function () {
+    'prefix' => '{lang}',
+    'where' => ['lang' => 'kh|en'],
+    'middleware' => ['auth', 'language']
+], function () {
+
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
     //Report Route
@@ -92,66 +96,127 @@ Route::group(['prefix' => 'user', 'as' => 'users.'], function () {
       Route::group(['prefix'=>'order','as'=>'orders.'], function(){
       Route::get('/', [OrderController::class, 'index'])->name('index');
     });
-    Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
-      Route::get('/', [OrderController::class, 'index'])->name('index');
-     
-    });
-    Route::group(['prefix'=>'cart','as'=>'carts.'], function(){
-      Route::post('/store', [CartController::class, 'store'])->name('store');
-      Route::delete('/destroy', [CartController::class, 'destroy'])->name('destroy');
+
+    // Sales
+    Route::group(['prefix' => 'sale', 'as' => 'sales.'], function () {
+        Route::get('/', [OrderController::class, 'index'])->name('index');
+        Route::get('/create', [OrderController::class, 'create'])->name('create');
+        Route::post('/store', [OrderController::class, 'store'])->name('store');
+        Route::get('/check/product', [OrderController::class, 'checkProductOrder'])->name('check.product');
+        Route::get('/{order}', [OrderController::class, 'show'])->name('show');
+        Route::get('/{order}/invoice', [OrderController::class, 'invoice'])->name('invoice');
+        Route::delete('/{order}', [OrderController::class, 'destroy'])->name('destroy');
     });
 
-    Route::group(['prefix'=>'expense','as'=>'expenses.'], function(){
-      Route::get('/', [ExpenseController::class, 'index'])->name('index');
-      Route::get('/create', [ExpenseController::class, 'create'])->name('create');
-      Route::post('/store', [ExpenseController::class, 'store'])->name('store');
-      Route::get('{expense}/edit', [ExpenseController::class, 'edit'])->name('edit');
-      Route::patch('/{expense}', [ExpenseController::class, 'update'])->name('update');
-      Route::delete('/{expense}', [ExpenseController::class, 'destroy'])->name('destroy');
-      Route::group(['prefix'=>'category','as'=>'categories.'], function(){
-        Route::get('/', [ExpenseCategoryController::class, 'index'])->name('index');
-        Route::get('/create', [ExpenseCategoryController::class, 'create'])->name('create');
-        Route::post('/store', [ExpenseCategoryController::class, 'store'])->name('store');
-        Route::get('/edit/{sale}', [ExpenseCategoryController::class, 'edit'])->name('edit');
-        Route::post('/update/{sale}', [ExpenseCategoryController::class, 'update'])->name('update');
-      });
+    // Order Customer
+    Route::group(['prefix' => 'order-customer', 'as' => 'orderCustomer.'], function () {
+        Route::get('/', [OrderCustomerController::class, 'index'])->name('index');
+        Route::get('/search', [OrderCustomerController::class, 'search'])->name('search');
     });
 
-    Route::group(['prefix'=>'model-type','as'=>'model_type.'], function(){
+    // Cart
+    Route::group(['prefix' => 'cart', 'as' => 'carts.'], function () {
+        Route::post('/store', [CartController::class, 'store'])->name('store');
+        Route::delete('/destroy', [CartController::class, 'destroy'])->name('destroy');
+    });
+
+    // Expenses
+    Route::group(['prefix' => 'expense', 'as' => 'expenses.'], function () {
+        Route::get('/', [ExpenseController::class, 'index'])->name('index');
+        Route::get('/create', [ExpenseController::class, 'create'])->name('create');
+        Route::post('/store', [ExpenseController::class, 'store'])->name('store');
+        Route::get('{expense}/edit', [ExpenseController::class, 'edit'])->name('edit');
+        Route::patch('/{expense}', [ExpenseController::class, 'update'])->name('update');
+        Route::delete('/{expense}', [ExpenseController::class, 'destroy'])->name('destroy');
+        Route::group(['prefix' => 'category', 'as' => 'categories.'], function () {
+            Route::get('/', [ExpenseCategoryController::class, 'index'])->name('index');
+            Route::get('/create', [ExpenseCategoryController::class, 'create'])->name('create');
+            Route::post('/store', [ExpenseCategoryController::class, 'store'])->name('store');
+            Route::get('/edit/{sale}', [ExpenseCategoryController::class, 'edit'])->name('edit');
+            Route::post('/update/{sale}', [ExpenseCategoryController::class, 'update'])->name('update');
+            Route::delete('/destroy/{sale}', [ExpenseCategoryController::class, 'destroy'])->name('destroy');
+        });
+    });
+
+    // Model Types
+    Route::group(['prefix' => 'model_types', 'as' => 'model_type.'], function () {
         Route::get('/', [ModelTypeController::class, 'index'])->name('index');
         Route::get('/create', [ModelTypeController::class, 'create'])->name('create');
         Route::post('/store', [ModelTypeController::class, 'store'])->name('store');
-        Route::post('/update', [ModelTypeController::class, 'update'])->name('update');
+        Route::get('/edit/{model_type}', [ModelTypeController::class, 'edit'])->name('edit');
+        Route::post('/update/{model_type}', [ModelTypeController::class, 'update'])->name('update');
+        Route::delete('/destroy/{model_type}', [ModelTypeController::class, 'destroy'])->name('destroy');
     });
-    Route::group(['prefix'=>'network','as'=>'network.'], function(){
-      Route::get('/', [NetworkController::class, 'index'])->name('index');
-      Route::get('/create', [NetworkController::class, 'create'])->name('create');
-      Route::post('/store', [NetworkController::class, 'store'])->name('store');
-      Route::post('/update', [NetworkController::class, 'update'])->name('update');
+
+    // Network
+    Route::group(['prefix' => 'network', 'as' => 'network.'], function () {
+        Route::get('/', [NetworkController::class, 'index'])->name('index');
+        Route::get('/create', [NetworkController::class, 'create'])->name('create');
+        Route::post('/store', [NetworkController::class, 'store'])->name('store');
+        Route::post('/update', [NetworkController::class, 'update'])->name('update');
+        Route::delete('/destroy/{network}', [NetworkController::class, 'destroy'])->name('destroy');
     });
-    Route::group(['prefix'=>'serial','as'=>'serial.'], function(){
+
+    // Serial
+    Route::group(['prefix' => 'serial', 'as' => 'serial.'], function () {
         Route::get('/', [SerialController::class, 'index'])->name('index');
         Route::get('/create', [SerialController::class, 'create'])->name('create');
         Route::post('/store', [SerialController::class, 'store'])->name('store');
         Route::post('/update', [SerialController::class, 'update'])->name('update');
+        Route::delete('/destroy/{serial}', [SerialController::class, 'destroy'])->name('destroy');
     });
-    Route::group(['prefix'=>'brand', 'as'=>'brand.'], function(){
+
+    // Brand
+    Route::group(['prefix' => 'brand', 'as' => 'brand.'], function () {
         Route::get('/', [BrandController::class, 'index'])->name('index');
         Route::get('/create', [BrandController::class, 'create'])->name('create');
         Route::post('/store', [BrandController::class, 'store'])->name('store');
         Route::post('/update', [BrandController::class, 'update'])->name('update');
+        Route::delete('/destroy/{brand}', [BrandController::class, 'destroy'])->name('destroy');
     });
-    Route::group(['prefix'=>'color', 'as'=>'color.'], function(){
+
+    // Color
+    Route::group(['prefix' => 'color', 'as' => 'color.'], function () {
         Route::get('/', [ColorController::class, 'index'])->name('index');
         Route::get('/create', [ColorController::class, 'create'])->name('create');
         Route::post('/store', [ColorController::class, 'store'])->name('store');
         Route::post('/update', [ColorController::class, 'update'])->name('update');
+        Route::delete('/destroy/{color}', [ColorController::class, 'destroy'])->name('destroy');
     });
-        Route::group(['prefix'=>'storage', 'as'=>'storage.'], function(){
+
+    // Storage
+    Route::group(['prefix' => 'storage', 'as' => 'storage.'], function () {
         Route::get('/', [StorageController::class, 'index'])->name('index');
         Route::get('/create', [StorageController::class, 'create'])->name('create');
         Route::post('/store', [StorageController::class, 'store'])->name('store');
         Route::post('/update', [StorageController::class, 'update'])->name('update');
+        Route::delete('/destroy/{storage}', [StorageController::class, 'destroy'])->name('destroy');
+    });
+
+    // Loans
+    Route::group(['prefix' => 'loan', 'as' => 'loans.'], function () {
+        Route::get('/', [LoanController::class, 'index'])->name('index');
+        Route::get('/create', [LoanController::class, 'create'])->name('create');
+        Route::post('/', [LoanController::class, 'store'])->name('store');
+        Route::get('/{loan}/edit', [LoanController::class, 'edit'])->name('edit');
+        Route::put('/{loan}', [LoanController::class, 'update'])->name('update');
+        Route::delete('/{loan}', [LoanController::class, 'destroy'])->name('destroy');
+        Route::get('{loan}/invoice/', [LoanController::class, 'invoice'])->name('invoice');
+        Route::get('{loan}/invoice/pdf', [LoanController::class, 'invoicePdf'])->name('invoice.pdf');
+        Route::get('{loan}/agreement/', [LoanController::class, 'agreement'])->name('agreement');
+        Route::group(['prefix' => 'payment', 'as' => 'payments.'], function () {
+            Route::get('/', [LoanPaymentController::class, 'index'])->name('index');
+            Route::get('/create', [LoanPaymentController::class, 'create'])->name('create');
+            Route::post('/', [LoanPaymentController::class, 'store'])->name('store');
+            Route::get('/{loanPayment}/edit', [LoanPaymentController::class, 'edit'])->name('edit');
+            Route::get('/{loanPayment}/invoice', [LoanPaymentController::class, 'invoice'])->name('invoice');
+            Route::get('/{loanPayment}/invoice/pdf', [LoanPaymentController::class, 'invoicePdf'])->name('invoice.pdf');
+            Route::put('/{loanPayment}', [LoanPaymentController::class, 'update'])->name('update');
+            Route::delete('/{loanPayment}', [LoanPaymentController::class, 'destroy'])->name('destroy');
+            Route::get('{loan}/list', [LoanController::class, 'list'])->name('list');
+            Route::get('/{loan}/pdf', [LoanController::class, 'pdf'])->name('pdf');
+            Route::get('/late', [LoanPaymentController::class, 'late'])->name('late');
+        });
     });
     Route::group(['prefix'=>'loan','as'=>'loans.'], function(){
       Route::get('/', [LoanController::class, 'index'])->name('index');
@@ -195,34 +260,27 @@ Route::group(['prefix' => 'user', 'as' => 'users.'], function () {
         Route::get('/', [CustomerController::class, 'index'])->name('index');
       });
   });
+
+    // Customers
+    Route::group(['prefix' => 'customer', 'as' => 'customers.'], function () {
+        Route::get('/', [CustomerController::class, 'index'])->name('index');
+        Route::get('/create', [CustomerController::class, 'create'])->name('create');
+        Route::post('/store', [CustomerController::class, 'store'])->name('store');
+        Route::get('/show/{id}', [CustomerController::class, 'show'])->name('show');
+        Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [CustomerController::class, 'update'])->name('update');
+        Route::delete('/destroy/{id}', [CustomerController::class, 'destroy'])->name('destroy');
+        Route::get('/password/edit/{id}', [CustomerController::class, 'editPassword'])->name('edit.password');
+        Route::post('/password/update/{id}', [CustomerController::class, 'updatePassword'])->name('update.password');
+        Route::group(['prefix' => 'gurantor', 'as' => 'gurantors.'], function () {
+            Route::get('/', [GurantorController::class, 'index'])->name('index');
+        });
+    });
+
+    // Helpers
     Route::get('series/brand/{id}', [ProductController::class, 'getSeriesBybrand'])->name('get-series');
     Route::get('products/check/{id}', [ProductController::class, 'getProductById'])->name('get-product-by-id');
     Route::get('company/', [CompanySettingController::class, 'index'])->name('company.index');
     Route::put('company/', [CompanySettingController::class, 'update'])->name('company.update');
 
-
-
-    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth']);
-
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'role:admin']);
-// OR
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'permission:view dashboard']);
-Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
-Route::resource('orders', OrderController::class);
-Route::get('/dashboard', function () {
-    // This safely checks if you are logged in, then loads the view directly
-    if (Auth::check()) {
-        return view('dashboard'); // Make sure you have a 'dashboard.blade.php' file!
-    }
-    return redirect('/login');
-})->middleware(['auth']);
-
-Route::get('/dashboard', function () {
-    if (Auth::check()) {
-        return view('dashboard'); // matrix your dashboard blade view filename
-    }
-    return redirect('/login');
-})->middleware(['auth'])->name('dashboard'); // <--- ADD THIS NAME AT THE END!
-
-Route::get('/sales/create', [SalesController::class, 'create'])->name('sales.create');
-});
+}); // end {lang} group
